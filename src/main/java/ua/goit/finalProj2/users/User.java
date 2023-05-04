@@ -23,5 +23,4 @@ public class User {
     String email;
     String role;
     boolean enabled;
-
 }
