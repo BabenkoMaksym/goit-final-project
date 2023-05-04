@@ -6,6 +6,8 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 
 @Entity
 @Data
@@ -13,6 +15,7 @@ import javax.persistence.Entity;
 @Table(name = "users", schema = "final_project")
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String username;
     String password;
