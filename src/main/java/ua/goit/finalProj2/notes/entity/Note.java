@@ -1,6 +1,8 @@
 package ua.goit.finalProj2.notes.entity;
 
 import lombok.Data;
+import ua.goit.finalProj2.users.User;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
