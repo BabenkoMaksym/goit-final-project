@@ -1,6 +1,7 @@
 package ua.goit.finalProj2.notes.entity;
 
 import lombok.Data;
+import lombok.ToString;
 import ua.goit.finalProj2.users.User;
 
 import javax.persistence.*;
@@ -9,7 +10,7 @@ import java.util.UUID;
 
 @Entity
 @Data
-@Table(name = "notes")
+@Table(name = "notes", schema = "final_project")
 public class Note {
 
     @Id
@@ -27,6 +28,7 @@ public class Note {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @ToString.Exclude
     private User user;
 
     @Column(name = "created_at")
