@@ -12,6 +12,4 @@ import org.springframework.stereotype.Service;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class NoteService {
     final NoteRepository repository;
-
-
 }
