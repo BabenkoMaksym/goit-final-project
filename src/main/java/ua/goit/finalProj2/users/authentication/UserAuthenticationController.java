@@ -31,6 +31,8 @@ public class UserAuthenticationController {
     @PostMapping
     public String post_authentication(@ModelAttribute UserDAO userDAO, Model model){
 
+        System.out.println(userDAO);
+
         try {
             User user = service.getUserByEmail(userDAO);
         } catch (AuthenticationException e){
