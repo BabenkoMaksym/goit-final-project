@@ -1,4 +1,4 @@
-package ua.goit.finalProj2.users.registration;
+package ua.goit.finalProj2.users.authentication;
 
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,36 +8,38 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import ua.goit.finalProj2.users.User;
 import ua.goit.finalProj2.users.UserService;
 import ua.goit.finalProj2.users.form_common.AuthenticationException;
 import ua.goit.finalProj2.users.form_common.UserDAO;
 
 
 @Controller
-@RequestMapping("/users/registration")
+@RequestMapping("/users/authentication")
 @AllArgsConstructor
-public class UserRegistrationController {
-
+public class UserAuthenticationController {
 
     @Autowired
     private final UserService service;
 
     @GetMapping
-    public String get_registration(Model model){
+    public String get_authentication(Model model){
         model.addAttribute("user", new UserDAO());
-        return "registration";
+        return "authentication";
     }
 
     @PostMapping
-    public String post_registration(@ModelAttribute UserDAO userDAO, Model model){
+    public String post_authentication(@ModelAttribute UserDAO userDAO, Model model){
+
+        System.out.println(userDAO);
 
         try {
-            service.createUser(userDAO);
+            User user = service.getUserByEmail(userDAO);
         } catch (AuthenticationException e){
             model.addAttribute("error", e.getMessage());
-            return "registration";
+            return "authentication";
         }
 
-        return "redirect:/users/login";
+        return "/";
     }
 }

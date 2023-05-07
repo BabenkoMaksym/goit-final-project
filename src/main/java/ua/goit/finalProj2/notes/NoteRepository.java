@@ -1,8 +1,8 @@
-package ua.goit.finalProj2.notes.repository;
+package ua.goit.finalProj2.notes;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import ua.goit.finalProj2.notes.entity.Note;
+import ua.goit.finalProj2.notes.Note;
 import java.util.UUID;
 
 @Repository

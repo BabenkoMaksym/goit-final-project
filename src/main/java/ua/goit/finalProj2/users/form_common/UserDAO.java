@@ -9,6 +9,7 @@ import lombok.experimental.FieldDefaults;
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserDAO {
+
     String username;
     String email;
     String password;

@@ -1,4 +1,4 @@
-package ua.goit.finalProj2.notes.entity;
+package ua.goit.finalProj2.notes;
 
 import lombok.Data;
 import lombok.ToString;

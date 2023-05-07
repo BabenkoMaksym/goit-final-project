@@ -1,15 +1,16 @@
 package ua.goit.finalProj2.users;
 
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import ua.goit.finalProj2.users.form_common.UserDAO;
-import ua.goit.finalProj2.users.registration.RegistrationException;
 
-import static ua.goit.finalProj2.users.form_common.UserMapper.toUser;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import ua.goit.finalProj2.users.form_common.AuthenticationException;
+import ua.goit.finalProj2.users.form_common.UserDAO;
+
+import static ua.goit.finalProj2.users.form_common.UserValidate.*;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +19,22 @@ public class UserService {
     @Autowired
     private final UserRepository repository;
 
-    public void createUser(UserDAO userDAO) throws RegistrationException {
-        repository.save(toUser(userDAO));
+
+
+    public void createUser(UserDAO userDAO) throws AuthenticationException{
+        validateUserAuthentication(userDAO);
+        userDAO.setPassword(passwordEncoder().encode(userDAO.getPassword()));
+        repository.create(userDAO);
+    }
+
+    public User getUserByEmail(UserDAO userDAO) throws AuthenticationException{
+        validateUserRegister(userDAO);
+        userDAO.setPassword(passwordEncoder().encode(userDAO.getPassword()));
+        return repository.getUserByEmail(userDAO);
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(12);
     }
 }
