@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.goit.finalProj2.users.form_common.AuthenticationException;
 import ua.goit.finalProj2.users.form_common.UserDto;
+import ua.goit.finalProj2.users.form_common.UserValidate;
 
 import static ua.goit.finalProj2.users.form_common.UserValidate.*;
 
@@ -22,9 +23,14 @@ public class UserService {
 
 
     public void createUser(UserDto userDto) throws AuthenticationException{
-        validateUserAuthentication(userDto);
-        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        repository.create(userDto);
+        validateUserRegister(userDto);
+        User user = new User();
+        user.setUsername(userDto.getUsername());
+        user.setEmail(userDto.getEmail());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        user.setRole(UserRole.USER);
+        user.setEnabled(true);
+        repository.save(user);
     }
 
     public User getUserByEmail(UserDto userDto) throws AuthenticationException{

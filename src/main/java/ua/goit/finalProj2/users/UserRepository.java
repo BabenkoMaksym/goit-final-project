@@ -15,9 +15,9 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     @Modifying
     @Transactional
-    @Query(value = "INSERT INTO final_project.users(username, email, password) " +
-            "VALUES(:#{#user.username}, :#{#user.email}, :#{#user.password})", nativeQuery = true)
-    void create(@Param("user") UserDto userDto);
+    @Query(value = "INSERT INTO final_project.users(username, password, email, role, enabled) " +
+            "VALUES(:#{#user.username}, :#{#user.password}, :#{#user.email}, :#{#user.role}), :#{#user.enabled}", nativeQuery = true)
+    void create(@Param("user") User user);
 
     @Query(value = "SELECT username, email, role, enabled FROM final_project.users " +
             "WHERE username = #{#user.username} AND password = #{#user.password}", nativeQuery = true)

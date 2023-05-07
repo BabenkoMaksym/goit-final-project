@@ -14,28 +14,28 @@ import ua.goit.finalProj2.users.form_common.UserDto;
 
 
 @Controller
-@RequestMapping("/users/registration")
+@RequestMapping("/register")
 @AllArgsConstructor
 public class UserRegistrationController {
 
 
     @Autowired
-    private final UserService service;
+    private final UserService userService;
 
     @GetMapping
-    public String get_registration(Model model){
-        model.addAttribute("user", new UserDto());
-        return "registration";
+    public String getRegistration(Model model){
+        model.addAttribute("userDto", new UserDto());
+        return "register";
     }
 
     @PostMapping
-    public String post_registration(@ModelAttribute UserDto userDto, Model model){
+    public String postRegistration(@ModelAttribute UserDto userDto, Model model){
 
         try {
-            service.createUser(userDto);
+            userService.createUser(userDto);
         } catch (AuthenticationException e){
             model.addAttribute("error", e.getMessage());
-            return "registration";
+            return "register";
         }
 
         return "redirect:/users/login";

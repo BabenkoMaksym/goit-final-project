@@ -4,7 +4,7 @@ public class UserValidate {
 
     private static final String USERNAME_REGEX = "^[A-Za-z0-9]{5,50}$";
     private static final String EMAIL_REGEX = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,}$";
-    private static final String PASSWORD_REGEX = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$";
+    private static final String PASSWORD_REGEX = "^.{8,100}$";
 
     public static void validateUserAuthentication(UserDto userDto) throws AuthenticationException{
         checkEmailValid(userDto.getEmail());
