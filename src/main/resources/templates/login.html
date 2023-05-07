@@ -14,14 +14,14 @@
     <h1>Authentication page</h1>
     <span th:text="${error}"></span>
 
-    <form th:action="@{/login}" method="post">
+    <form th:action="@{/login}" th:object="${userDto}" method="post">
         <div>
-            <p>Email</p>
-            <input type="text" placeholder="Login" id="username" name="username">
+            <p>Login</p>
+            <input type="text" placeholder="Login" th:field="*{username}">
         </div>
         <div>
             <p>Password</p>
-            <input type="password" placeholder="Password" id="password" name="password">
+            <input type="password" placeholder="Password" th:field="*{password}">
         </div>
         <div>
             <input type="submit" value="Sign In">

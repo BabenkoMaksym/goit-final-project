@@ -7,7 +7,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.goit.finalProj2.users.form_common.AuthenticationException;
 import ua.goit.finalProj2.users.form_common.UserDto;
-import ua.goit.finalProj2.users.form_common.UserValidate;
 
 import static ua.goit.finalProj2.users.form_common.UserValidate.*;
 
@@ -33,9 +32,8 @@ public class UserService {
         repository.save(user);
     }
 
-    public User getUserByEmail(UserDto userDto) throws AuthenticationException{
-        validateUserRegister(userDto);
-//        userDto.setPassword(passwordEncoder().encode(userDto.getPassword()));
+    public User getUserByUsername(UserDto userDto) throws AuthenticationException{
+        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
         return repository.getUserByUsername(userDto);
     }
 

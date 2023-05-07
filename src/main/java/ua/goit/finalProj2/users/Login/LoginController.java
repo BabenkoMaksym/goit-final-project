@@ -24,16 +24,14 @@ public class LoginController {
 
     @GetMapping
     public String getLogin(Model model){
+        model.addAttribute("userDto", new UserDto());
         return "login";
     }
 
     @PostMapping
     public String postLogin(@ModelAttribute UserDto userDto, Model model){
-
-        System.out.println(userDto);
-
         try {
-            User user = userService.getUserByEmail(userDto);
+            User user = userService.getUserByUsername(userDto);
         } catch (AuthenticationException e){
             model.addAttribute("error", e.getMessage());
             return "login";
@@ -41,4 +39,5 @@ public class LoginController {
 
         return "/";
     }
+
 }

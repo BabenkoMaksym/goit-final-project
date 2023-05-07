@@ -1,4 +1,4 @@
-package ua.goit.finalProj2;
+package ua.goit.finalProj2.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -27,6 +27,7 @@ public class WebSecurityConfig {
         http.csrf().disable()
                 .authorizeHttpRequests()
                 .antMatchers("/login", "/register").permitAll()
+                .antMatchers("/admin/**").hasAuthority("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login").loginProcessingUrl("/login").permitAll()

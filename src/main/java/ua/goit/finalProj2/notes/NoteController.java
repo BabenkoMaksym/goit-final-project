@@ -18,7 +18,7 @@ public class NoteController {
         this.noteService = noteService;
     }
 
-    @GetMapping("/note/edit")
+    @GetMapping("/edit")
     public ModelAndView showNoteForm(@RequestParam(name = "id", required = false) UUID id) {
         ModelAndView result = new ModelAndView("note/edit");
         Note note = new Note();

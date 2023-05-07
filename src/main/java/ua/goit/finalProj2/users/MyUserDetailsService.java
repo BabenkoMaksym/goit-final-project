@@ -26,22 +26,4 @@ public class MyUserDetailsService implements UserDetailsService {
         return new UserPrincipal(user);
     }
 
-//    @Override
-//    public User registerNewUser(UserDto userDto) {
-//        try {
-//            UserValidate.validateUserRegister(userDto);
-//        } catch (AuthenticationException e) {
-//            throw new RuntimeException(e);
-//        }
-//        User user = new User();
-//        user.setUsername(userDto.getUsername());
-//        user.setEmail(userDto.getEmail());
-//        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-//        user.setRole(UserRole.USER);
-//        user.setEnabled(true);
-//
-//        return userRepository.save(user);
-//    }
-
-
 }
