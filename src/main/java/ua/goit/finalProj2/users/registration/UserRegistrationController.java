@@ -10,32 +10,32 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ua.goit.finalProj2.users.UserService;
 import ua.goit.finalProj2.users.form_common.AuthenticationException;
-import ua.goit.finalProj2.users.form_common.UserDAO;
+import ua.goit.finalProj2.users.form_common.UserDto;
 
 
 @Controller
-@RequestMapping("/users/registration")
+@RequestMapping("/register")
 @AllArgsConstructor
 public class UserRegistrationController {
 
 
     @Autowired
-    private final UserService service;
+    private final UserService userService;
 
     @GetMapping
-    public String get_registration(Model model){
-        model.addAttribute("user", new UserDAO());
-        return "registration";
+    public String getRegistration(Model model){
+        model.addAttribute("userDto", new UserDto());
+        return "register";
     }
 
     @PostMapping
-    public String post_registration(@ModelAttribute UserDAO userDAO, Model model){
+    public String postRegistration(@ModelAttribute UserDto userDto, Model model){
 
         try {
-            service.createUser(userDAO);
+            userService.createUser(userDto);
         } catch (AuthenticationException e){
             model.addAttribute("error", e.getMessage());
-            return "registration";
+            return "register";
         }
 
         return "redirect:/users/login";
