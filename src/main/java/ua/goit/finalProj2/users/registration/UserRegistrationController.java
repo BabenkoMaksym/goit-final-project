@@ -30,15 +30,12 @@ public class UserRegistrationController {
 
     @PostMapping
     public String postRegistration(@ModelAttribute UserDto userDto, Model model){
-
-        System.out.println("reg");
         try {
             userService.createUser(userDto);
         } catch (AuthenticationException e){
             model.addAttribute("error", e.getMessage());
             return "register";
         }
-
         return "redirect:/users/login";
     }
 }

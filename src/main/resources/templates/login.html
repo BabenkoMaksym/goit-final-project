@@ -16,15 +16,20 @@
 
     <form th:action="@{/login}" th:object="${userDto}" method="post">
         <div>
-            <p>Login</p>
-            <input type="text" placeholder="Login" th:field="*{username}">
+            <p>Логін</p>
+            <input type="text" placeholder="логін" th:field="*{username}">
         </div>
         <div>
-            <p>Password</p>
-            <input type="password" placeholder="Password" th:field="*{password}">
+            <p>Пароль</p>
+            <input type="password" placeholder="пароль" th:field="*{password}">
         </div>
         <div>
-            <input type="submit" value="Sign In">
+            <input type="submit" value="Вхід">
+        </div>
+        <div>
+            <a href="/register">
+                <button type="button">Реєстрація</button>
+            </a>
         </div>
     </form>
 </div>

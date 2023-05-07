@@ -13,6 +13,8 @@ import ua.goit.finalProj2.users.UserService;
 import ua.goit.finalProj2.users.form_common.AuthenticationException;
 import ua.goit.finalProj2.users.form_common.UserDto;
 
+import javax.servlet.http.HttpServletRequest;
+
 
 @Controller
 @RequestMapping("/login")
@@ -22,8 +24,16 @@ public class LoginController {
     @Autowired
     private final UserService userService;
 
+    @Autowired
+    private HttpServletRequest request;
+
     @GetMapping
     public String getLogin(Model model){
+        String errorMessage = (String) request.getSession().getAttribute("error");
+        if (errorMessage != null) {
+            model.addAttribute("error", errorMessage);
+            request.getSession().removeAttribute("error");
+        }
         model.addAttribute("userDto", new UserDto());
         return "login";
     }
@@ -36,7 +46,6 @@ public class LoginController {
             model.addAttribute("error", e.getMessage());
             return "login";
         }
-
         return "/";
     }
 

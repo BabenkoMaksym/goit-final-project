@@ -15,19 +15,24 @@
 
     <form th:action="@{/register}" th:object="${userDto}" method="post">
         <div>
-            <p>Login</p>
-            <input type="text" placeholder="Username" th:field="*{username}">
+            <p>Логін</p>
+            <input type="text" placeholder="будь-які символи латиниці та цифри від 5 до 50 символів включно" th:field="*{username}">
         </div>
         <div>
             <p>Email</p>
             <input type="text" placeholder="Email" th:field="*{email}">
         </div>
         <div>
-            <p>Password</p>
-            <input type="password" placeholder="Password" th:field="*{password}">
+            <p>Пароль</p>
+            <input type="password" placeholder="будь-які символи від 8 до 100 символів включно" th:field="*{password}">
         </div>
         <div>
-            <input type="submit" value="Register">
+            <input type="submit" value="Підтвердити">
+        </div>
+        <div>
+            <a href="/login">
+                <button type="button">Вхід</button>
+            </a>
         </div>
     </form>
 </div>

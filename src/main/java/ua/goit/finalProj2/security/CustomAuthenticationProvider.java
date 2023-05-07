@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import ua.goit.finalProj2.users.User;
 import ua.goit.finalProj2.users.UserRepository;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,22 +24,29 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private HttpServletRequest request;
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getName();
         String password = authentication.getCredentials().toString();
 
-        User user = userRepository.findUserByUsername(username).get();
+        User user = userRepository.findUserByUsername(username).orElse(null);
         if (user == null) {
+            request.getSession().setAttribute("error", "Користувача "+ username + " не існує." +
+                    "Перейдіть на сторінку реєстрації");
             throw new BadCredentialsException("Username not found");
         }
 
         if (!user.isEnabled()) {
+            request.getSession().setAttribute("error", "Користувача "+ username + " заблоковано");
             throw new DisabledException("User is banned");
 
         }
 
-        if (!passwordEncoder.encode(password).equals(user.getPassword())) {
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            request.getSession().setAttribute("error", "Не вірно введений пароль!");
             throw new BadCredentialsException("Invalid password");
         }
 

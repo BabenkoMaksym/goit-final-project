@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import ua.goit.finalProj2.users.form_common.AuthenticationException;
 import ua.goit.finalProj2.users.form_common.UserDto;
 
@@ -22,14 +23,19 @@ public class UserService {
 
 
     public void createUser(UserDto userDto) throws AuthenticationException{
-        validateUserRegister(userDto);
-        User user = new User();
-        user.setUsername(userDto.getUsername());
-        user.setEmail(userDto.getEmail());
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        user.setRole(UserRole.USER);
-        user.setEnabled(true);
-        repository.save(user);
+        User user = repository.findUserByUsername(userDto.getUsername()).orElse(null);
+        if (user != null) {
+            throw new AuthenticationException("Користувач з таким логіном вже існує.");
+        } else {
+            user = new User();
+            validateUserRegister(userDto);
+            user.setUsername(userDto.getUsername());
+            user.setEmail(userDto.getEmail());
+            user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+            user.setRole(UserRole.USER);
+            user.setEnabled(true);
+            repository.save(user);
+        }
     }
 
     public User getUserByUsername(UserDto userDto) throws AuthenticationException{
