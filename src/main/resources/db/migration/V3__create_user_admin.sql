@@ -1,2 +1,2 @@
 INSERT INTO final_project.users (username, password, email, role, enabled)
-VALUES ('admin', '123', 'finalprojectadmin@gmail.com', 'admin', true);
+VALUES ('admin', '$2a$12$mSIb5pw0Iq9WbN8TijXCm.WqT95m0UBSfRbw1cdnRPc8aVqUBBJOq', 'finalprojectadmin@gmail.com', 'ADMIN', true);
