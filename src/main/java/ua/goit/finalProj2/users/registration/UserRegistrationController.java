@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ua.goit.finalProj2.users.UserService;
 import ua.goit.finalProj2.users.form_common.AuthenticationException;
-import ua.goit.finalProj2.users.form_common.UserDAO;
+import ua.goit.finalProj2.users.form_common.UserDto;
 
 
 @Controller
@@ -24,15 +24,15 @@ public class UserRegistrationController {
 
     @GetMapping
     public String get_registration(Model model){
-        model.addAttribute("user", new UserDAO());
+        model.addAttribute("user", new UserDto());
         return "registration";
     }
 
     @PostMapping
-    public String post_registration(@ModelAttribute UserDAO userDAO, Model model){
+    public String post_registration(@ModelAttribute UserDto userDto, Model model){
 
         try {
-            service.createUser(userDAO);
+            service.createUser(userDto);
         } catch (AuthenticationException e){
             model.addAttribute("error", e.getMessage());
             return "registration";
