@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.UUID;
 
 @RestController
@@ -37,5 +39,16 @@ public class NoteController {
             noteService.update(note);
         }
         return "redirect:/note/list";
+    }
+    @PostMapping("/delete")
+    @ResponseBody
+    public void deleteNote (@RequestParam("id") UUID id, HttpServletResponse resp){
+        noteService.deleteById(id);
+        try {
+            resp.sendRedirect("http://localhost:9999/note/list");
+            resp.setHeader("Location", "/note/list");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
