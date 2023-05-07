@@ -42,8 +42,13 @@ public class NoteController {
     }
     @PostMapping("/delete")
     @ResponseBody
+
     public void deleteNote (@RequestParam("id") UUID id, HttpServletResponse resp){
-        noteService.deleteById(id);
+        try{
+            noteService.deleteById(id);
+        } catch (IllegalArgumentException e){
+            resp.setHeader("deleteError", e.getMessage());
+        }
         try {
             resp.sendRedirect("http://localhost:9999/note/list");
             resp.setHeader("Location", "/note/list");
