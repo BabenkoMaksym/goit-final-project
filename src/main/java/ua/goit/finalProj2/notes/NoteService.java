@@ -47,4 +47,7 @@ public class NoteService {
             throw new IllegalArgumentException("Note with id " + id + " does not exist");
         }
     }
+    public List<Note> feedNote (int page){
+        return noteRepository.feedNotes(page*10);
+    }
 }

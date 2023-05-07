@@ -43,8 +43,9 @@ public class NoteController {
     }
 
     @GetMapping("/")
-    public String feedNotes(Model model){
-        List<Note> notes = noteService.listAll();
+    public String feedNotes(@RequestParam(name = "page", required = false) Integer page, Model model){
+        if(page==null)page=0;
+        List<Note> notes = noteService.feedNote(page);
        model.addAttribute("notes", notes);
         return  "feed";
     }
