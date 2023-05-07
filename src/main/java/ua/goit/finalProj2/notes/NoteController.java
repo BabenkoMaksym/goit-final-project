@@ -2,9 +2,12 @@ package ua.goit.finalProj2.notes;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -37,5 +40,12 @@ public class NoteController {
             noteService.update(note);
         }
         return "redirect:/note/list";
+    }
+
+    @GetMapping("/")
+    public String feedNotes (Model model){
+        List<Note> notes = noteService.listAll();
+       model.addAttribute("notes", notes);
+        return  "feed";
     }
 }
