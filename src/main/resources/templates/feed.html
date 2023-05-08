@@ -48,6 +48,7 @@
 <div th:each="Note : ${notes}" class="note">
     <div class="name" th:text="${Note.name}"></div>
     <div class="content collapsed" th:text="${Note.content}"></div>
+    <div class="content collapsed" th:text="${Note.user.username}"></div>
     <button class="expand-button" onclick="expandContent(this)">Переглянути повністю</button>
 </div>
 <button onclick="previousPage()">Previous Page</button>
