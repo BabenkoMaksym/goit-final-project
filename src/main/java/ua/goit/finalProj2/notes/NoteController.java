@@ -7,7 +7,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ua.goit.finalProj2.users.UserPrincipal;
+import ua.goit.finalProj2.users.UserRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -19,6 +21,9 @@ import java.util.UUID;
 @RequestMapping("/notes")
 public class NoteController {
     private NoteService noteService;
+
+    @Autowired
+    UserRepository userRepository;
 
     @Autowired
     public void setNoteService(NoteService noteService) {
@@ -76,13 +81,13 @@ public class NoteController {
     }
 
     @PostMapping("/create")
-    public ModelAndView createNote(@ModelAttribute("note") Note note, Principal principal) {
+    public String createNote(@ModelAttribute("note") Note note, Model model,  Principal principal) {
         String name = principal.getName();
         note.setId(UUID.randomUUID());
-//        note.setUser(userService.getCurrentUser());
+        note.setUser(userRepository.findUserByUsername(name).get());
+        note.setCreatedAt(LocalDateTime.now());
         noteService.add(note);
-        ModelAndView modelAndView = new ModelAndView("note/created");
-        modelAndView.addObject("note", note);
-        return modelAndView;
+        model.addAttribute("note", note);
+        return "note/created";
     }
 }

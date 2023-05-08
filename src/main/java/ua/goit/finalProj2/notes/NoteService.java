@@ -24,11 +24,6 @@ public class NoteService {
         return noteRepository.findAll();
     }
 
-    public List<Note> listMyNotes(User currentUser) {
-        return listAll().stream()
-                .filter(x -> x.getUser().getId().equals(currentUser.getId()))
-                .collect(Collectors.toList());
-    }
     public Note add(Note note) {
         return noteRepository.save(note);
     }
