@@ -2,14 +2,17 @@ package ua.goit.finalProj2.notes;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.UUID;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 @RequestMapping("/note")
 public class NoteController {
@@ -55,5 +58,13 @@ public class NoteController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @GetMapping("/")
+    public String feedNotes(@RequestParam(name = "page", required = false) Integer page, Model model){
+        if(page==null)page=0;
+        List<Note> notes = noteService.feedNote(page);
+        model.addAttribute("notes", notes);
+        return  "feed";
     }
 }

@@ -24,7 +24,7 @@ public class Note {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "access_type")
-    private AccessType accessType;
+    private NoteType noteType;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
