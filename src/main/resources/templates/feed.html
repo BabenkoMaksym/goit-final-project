@@ -50,6 +50,8 @@
     <div class="content collapsed" th:text="${Note.content}"></div>
     <button class="expand-button" onclick="expandContent(this)">Переглянути повністю</button>
 </div>
+<button onclick="previousPage()">Previous Page</button>
+<button onclick="nextPage()">Next Page</button>
 <script>
     function expandContent(button) {
         var note = button.parentNode;
@@ -60,6 +62,44 @@
         } else {
             button.textContent = "Переглянути повністю";
         }
+    }
+
+    function previousPage() {
+        // Get the current URL and parse the query parameters
+        const url = new URL(window.location.href);
+        const searchParams = url.searchParams;
+
+        // Get the current page parameter, or default to 1
+        let page = parseInt(searchParams.get('page')) || 1;
+
+        // Decrement the page parameter, but not below 1
+        page = Math.max(1, page - 1);
+
+        // Update the URL with the new page parameter
+        searchParams.set('page', page);
+        url.search = searchParams.toString();
+
+        // Reload the page with the updated URL
+        window.location.href = url.toString();
+    }
+
+    function nextPage() {
+        // Get the current URL and parse the query parameters
+        const url = new URL(window.location.href);
+        const searchParams = url.searchParams;
+
+        // Get the current page parameter, or default to 1
+        let page = parseInt(searchParams.get('page')) || 1;
+
+        // Increment the page parameter
+        page++;
+
+        // Update the URL with the new page parameter
+        searchParams.set('page', page);
+        url.search = searchParams.toString();
+
+        // Reload the page with the updated URL
+        window.location.href = url.toString();
     }
 </script>
 </body>
