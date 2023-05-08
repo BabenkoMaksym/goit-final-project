@@ -31,7 +31,7 @@ public class WebSecurityConfig {
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login").loginProcessingUrl("/login").permitAll()
-                .defaultSuccessUrl("/notes", true)
+                .defaultSuccessUrl("/notes/", true)
                 .and()
                 .logout().permitAll();
         return http.build();

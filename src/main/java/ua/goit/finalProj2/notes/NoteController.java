@@ -14,7 +14,7 @@ import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/note")
+@RequestMapping("/notes")
 public class NoteController {
     private NoteService noteService;
 
@@ -43,9 +43,9 @@ public class NoteController {
         }
         return "redirect:/note/list";
     }
+
     @PostMapping("/delete")
     @ResponseBody
-
     public void deleteNote (@RequestParam("id") UUID id, HttpServletResponse resp){
         try{
             noteService.deleteById(id);
@@ -60,10 +60,11 @@ public class NoteController {
         }
     }
 
+
     @GetMapping("/")
     public String feedNotes(@RequestParam(name = "page", required = false) Integer page, Model model){
-        if(page==null)page=0;
-        List<Note> notes = noteService.feedNote(page);
+        page = page == null ? 0 : page >= 1 ? page - 1 : page;
+        List<Note> notes = noteService.listPublicNotes(page);
         model.addAttribute("notes", notes);
         return  "feed";
     }

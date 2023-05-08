@@ -1,7 +1,10 @@
 package ua.goit.finalProj2.notes;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.Type;
 import ua.goit.finalProj2.users.User;
 
 import javax.persistence.*;
