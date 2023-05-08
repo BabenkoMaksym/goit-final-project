@@ -5,11 +5,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 import ua.goit.finalProj2.users.form_common.AuthenticationException;
 import ua.goit.finalProj2.users.form_common.UserDto;
 
-import static ua.goit.finalProj2.users.form_common.UserValidate.*;
+import static ua.goit.finalProj2.users.form_common.UserValidate.validateUserRegister;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +33,7 @@ public class UserService {
             user.setPassword(passwordEncoder.encode(userDto.getPassword()));
             user.setRole(UserRole.USER);
             user.setEnabled(true);
-            repository.save(user);
+            repository.create(user);
         }
     }
 
