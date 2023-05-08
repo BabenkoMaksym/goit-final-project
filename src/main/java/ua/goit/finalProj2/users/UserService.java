@@ -7,9 +7,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.goit.finalProj2.users.form_common.AuthenticationException;
 import ua.goit.finalProj2.users.form_common.UserDto;
-import ua.goit.finalProj2.users.form_common.UserValidate;
 
-import static ua.goit.finalProj2.users.form_common.UserValidate.*;
+import static ua.goit.finalProj2.users.form_common.UserValidate.validateUserRegister;
 
 @Service
 @RequiredArgsConstructor
@@ -23,19 +22,23 @@ public class UserService {
 
 
     public void createUser(UserDto userDto) throws AuthenticationException{
-        validateUserRegister(userDto);
-        User user = new User();
-        user.setUsername(userDto.getUsername());
-        user.setEmail(userDto.getEmail());
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        user.setRole(UserRole.USER);
-        user.setEnabled(true);
-        repository.save(user);
+        User user = repository.findUserByUsername(userDto.getUsername()).orElse(null);
+        if (user != null) {
+            throw new AuthenticationException("Користувач з таким логіном вже існує.");
+        } else {
+            user = new User();
+            validateUserRegister(userDto);
+            user.setUsername(userDto.getUsername());
+            user.setEmail(userDto.getEmail());
+            user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+            user.setRole(UserRole.USER);
+            user.setEnabled(true);
+            repository.create(user);
+        }
     }
 
-    public User getUserByEmail(UserDto userDto) throws AuthenticationException{
-        validateUserRegister(userDto);
-//        userDto.setPassword(passwordEncoder().encode(userDto.getPassword()));
+    public User getUserByUsername(UserDto userDto) throws AuthenticationException{
+        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
         return repository.getUserByUsername(userDto);
     }
 

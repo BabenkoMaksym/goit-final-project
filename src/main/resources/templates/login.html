@@ -11,20 +11,25 @@
 </head>
 <body>
 <div class="center">
-    <h1>Authentication page</h1>
+    <h1>Авторизація</h1>
     <span th:text="${error}"></span>
 
-    <form th:action="@{/login}" method="post">
+    <form th:action="@{/login}" th:object="${userDto}" method="post">
         <div>
-            <p>Email</p>
-            <input type="text" placeholder="Login" id="username" name="username">
+            <p>Логін</p>
+            <input type="text" placeholder="логін" th:field="*{username}">
         </div>
         <div>
-            <p>Password</p>
-            <input type="password" placeholder="Password" id="password" name="password">
+            <p>Пароль</p>
+            <input type="password" placeholder="пароль" th:field="*{password}">
         </div>
         <div>
-            <input type="submit" value="Sign In">
+            <input type="submit" value="Вхід">
+        </div>
+        <div>
+            <a href="/register">
+                <button type="button">Реєстрація</button>
+            </a>
         </div>
     </form>
 </div>

@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.UUID;
 
 @Controller
@@ -21,7 +23,7 @@ public class NoteController {
         this.noteService = noteService;
     }
 
-    @GetMapping("/note/edit")
+    @GetMapping("/edit")
     public ModelAndView showNoteForm(@RequestParam(name = "id", required = false) UUID id) {
         ModelAndView result = new ModelAndView("note/edit");
         Note note = new Note();
@@ -41,12 +43,28 @@ public class NoteController {
         }
         return "redirect:/note/list";
     }
+    @PostMapping("/delete")
+    @ResponseBody
+
+    public void deleteNote (@RequestParam("id") UUID id, HttpServletResponse resp){
+        try{
+            noteService.deleteById(id);
+        } catch (IllegalArgumentException e){
+            resp.setHeader("deleteError", e.getMessage());
+        }
+        try {
+            resp.sendRedirect("http://localhost:9999/note/list");
+            resp.setHeader("Location", "/note/list");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @GetMapping("/")
     public String feedNotes(@RequestParam(name = "page", required = false) Integer page, Model model){
         if(page==null)page=0;
         List<Note> notes = noteService.feedNote(page);
-       model.addAttribute("notes", notes);
+        model.addAttribute("notes", notes);
         return  "feed";
     }
 }
