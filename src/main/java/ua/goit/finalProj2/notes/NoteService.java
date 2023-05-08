@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ua.goit.finalProj2.users.User;
 
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 public class NoteService {
     final NoteRepository noteRepository;
 
-    public List<Note> listAll() {
+    public List<Note> listPublicNotes() {
         return noteRepository.findAll();
     }
 
@@ -54,7 +55,7 @@ public class NoteService {
             throw new IllegalArgumentException("Note with id " + id + " does not exist");
         }
     }
-    public List<Note> feedNote (int page){
-        return noteRepository.feedNotes(page*10);
+    public List<Note> listPublicNotes(Integer page){
+        return noteRepository.findPublicNotes(PageRequest.of(page, 10));
     }
 }

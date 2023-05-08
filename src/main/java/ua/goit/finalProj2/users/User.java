@@ -1,10 +1,13 @@
 package ua.goit.finalProj2.users;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+import ua.goit.finalProj2.notes.Note;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -20,4 +23,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     UserRole role;
     boolean enabled;
+
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
+    List<Note> notes;
+
 }
