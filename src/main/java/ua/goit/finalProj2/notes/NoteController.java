@@ -4,29 +4,25 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import ua.goit.finalProj2.users.User;
-import ua.goit.finalProj2.users.UserService;
+import ua.goit.finalProj2.users.UserPrincipal;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import java.security.Principal;
 import java.util.UUID;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
-@RequestMapping("/note")
+@RequestMapping("/notes")
 public class NoteController {
     private NoteService noteService;
-    private UserService userService;
 
     @Autowired
     public void setNoteService(NoteService noteService) {
         this.noteService = noteService;
     }
-    @Autowired
-    public void setUserService(UserService userService) {this.userService = userService;}
 
     @GetMapping("/edit")
     public ModelAndView showNoteForm(@RequestParam(name = "id", required = false) UUID id) {
@@ -50,16 +46,15 @@ public class NoteController {
     }
 
     @GetMapping("/create")
-    public ModelAndView showCreateNoteForm() {
-        ModelAndView modelAndView = new ModelAndView("note/create");
-        modelAndView.addObject("note", new Note());
-        return modelAndView;
+    public String showCreateNoteForm(Model model) {
+        model.addAttribute("note", new Note());
+        return "note/create";
     }
 
     @PostMapping("/create")
-    public ModelAndView createNote(@ModelAttribute("note") Note note) {
+    public ModelAndView createNote(@ModelAttribute("note") Note note, Principal principal) {
+        String name = principal.getName();
         note.setId(UUID.randomUUID());
-        note.setCreatedAt(LocalDateTime.now());
 //        note.setUser(userService.getCurrentUser());
         noteService.add(note);
         ModelAndView modelAndView = new ModelAndView("note/created");

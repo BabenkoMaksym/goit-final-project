@@ -1,14 +1,8 @@
 package ua.goit.finalProj2.users;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import ua.goit.finalProj2.users.form_common.AuthenticationException;
-import ua.goit.finalProj2.users.form_common.UserDto;
-import ua.goit.finalProj2.users.form_common.UserValidate;
 
 
 public class MyUserDetailsService implements UserDetailsService {
