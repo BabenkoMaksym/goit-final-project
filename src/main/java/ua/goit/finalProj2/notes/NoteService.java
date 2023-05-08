@@ -5,10 +5,12 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
+import ua.goit.finalProj2.users.User;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +23,11 @@ public class NoteService {
         return noteRepository.findAll();
     }
 
+    public List<Note> listMyNotes(User currentUser) {
+        return listAll().stream()
+                .filter(x -> x.getUser().getId().equals(currentUser.getId()))
+                .collect(Collectors.toList());
+    }
     public Note add(Note note) {
         return noteRepository.save(note);
     }

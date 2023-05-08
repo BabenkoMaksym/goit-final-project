@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Note Created</title>
+</head>
+<body>
+<h1>Note Created</h1>
+<table>
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Content</th>
+    <th>Access Type</th>
+    <th>Created At</th>
+  </tr>
+  <tr>
+    <td th:text="${note.id}"></td>
+    <td th:text="${note.name}"></td>
+    <td th:text="${note.content.length() > 200 ? note.content.substring(0, 200) + '...' : note.content}"></td>
+    <td th:text="${note.noteType}"></td>
+    <td th:text="${note.createdAt}"></td>
+  </tr>
+</table>
+</body>
+</html>

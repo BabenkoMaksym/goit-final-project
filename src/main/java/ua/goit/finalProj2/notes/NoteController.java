@@ -2,26 +2,31 @@ package ua.goit.finalProj2.notes;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import ua.goit.finalProj2.users.User;
+import ua.goit.finalProj2.users.UserService;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.UUID;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/note")
 public class NoteController {
     private NoteService noteService;
+    private UserService userService;
 
     @Autowired
     public void setNoteService(NoteService noteService) {
         this.noteService = noteService;
     }
+    @Autowired
+    public void setUserService(UserService userService) {this.userService = userService;}
 
     @GetMapping("/edit")
     public ModelAndView showNoteForm(@RequestParam(name = "id", required = false) UUID id) {
@@ -43,28 +48,22 @@ public class NoteController {
         }
         return "redirect:/note/list";
     }
-    @PostMapping("/delete")
-    @ResponseBody
 
-    public void deleteNote (@RequestParam("id") UUID id, HttpServletResponse resp){
-        try{
-            noteService.deleteById(id);
-        } catch (IllegalArgumentException e){
-            resp.setHeader("deleteError", e.getMessage());
-        }
-        try {
-            resp.sendRedirect("http://localhost:9999/note/list");
-            resp.setHeader("Location", "/note/list");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    @GetMapping("/create")
+    public ModelAndView showCreateNoteForm() {
+        ModelAndView modelAndView = new ModelAndView("note/create");
+        modelAndView.addObject("note", new Note());
+        return modelAndView;
     }
 
-    @GetMapping("/")
-    public String feedNotes(@RequestParam(name = "page", required = false) Integer page, Model model){
-        if(page==null)page=0;
-        List<Note> notes = noteService.feedNote(page);
-        model.addAttribute("notes", notes);
-        return  "feed";
+    @PostMapping("/create")
+    public ModelAndView createNote(@ModelAttribute("note") Note note) {
+        note.setId(UUID.randomUUID());
+        note.setCreatedAt(LocalDateTime.now());
+//        note.setUser(userService.getCurrentUser());
+        noteService.add(note);
+        ModelAndView modelAndView = new ModelAndView("note/created");
+        modelAndView.addObject("note", note);
+        return modelAndView;
     }
 }
