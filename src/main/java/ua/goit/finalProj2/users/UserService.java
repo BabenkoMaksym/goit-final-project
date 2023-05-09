@@ -3,10 +3,15 @@ package ua.goit.finalProj2.users;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.goit.finalProj2.users.form_common.AuthenticationException;
 import ua.goit.finalProj2.users.form_common.UserDto;
+
+import java.util.Optional;
 
 import static ua.goit.finalProj2.users.form_common.UserValidate.validateUserRegister;
 
@@ -42,4 +47,24 @@ public class UserService {
         return repository.getUserByUsername(userDto);
     }
 
+    public User authorizeUser(boolean authenticated) throws AuthenticationException {
+        if (!authenticated) {
+            throw new AuthenticationException("User is not authenticated");
+        }
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        return findByUsername(username);
+    }
+
+    public User findByUsername(String name) throws UsernameNotFoundException {
+        Optional<User> optionalUser = repository.findUserByUsername(name);
+
+        if (optionalUser.isEmpty()) {
+            throw new UsernameNotFoundException("User not found");
+        }
+
+        return optionalUser.get();
+    }
 }
