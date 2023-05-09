@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import ua.goit.finalProj2.notes.form_common.NoteCreateException;
 import ua.goit.finalProj2.users.UserPrincipal;
 import ua.goit.finalProj2.users.UserRepository;
 
@@ -42,7 +43,7 @@ public class NoteController {
     }
 
     @PostMapping("/note/edit")
-    public String saveOrUpdateNote(@ModelAttribute("note") Note note) {
+    public String saveOrUpdateNote(@ModelAttribute("note") Note note) throws NoteCreateException {
         if (note.getId() == null) {
             noteService.add(note);
         } else {
@@ -81,7 +82,7 @@ public class NoteController {
     }
 
     @PostMapping("/create")
-    public String createNote(@ModelAttribute("note") Note note, Model model,  Principal principal) {
+    public String createNote(@ModelAttribute("note") Note note, Model model,  Principal principal) throws NoteCreateException {
         String name = principal.getName();
         note.setId(UUID.randomUUID());
         note.setUser(userRepository.findUserByUsername(name).get());
