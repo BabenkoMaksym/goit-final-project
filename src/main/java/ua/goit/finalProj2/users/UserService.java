@@ -37,9 +37,21 @@ public class UserService {
         }
     }
 
-    public User getUserByUsername(UserDto userDto) throws AuthenticationException{
-        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        return repository.getUserByUsername(userDto);
+    public User getUserByUsername(UserDto userDto) throws AuthenticationException {
+        User user = repository.findUserByUsername(userDto.getUsername())
+                .orElseThrow(() -> new AuthenticationException("Invalid username"));
+        return user;
     }
 
+    public void changePassword(UserDto userDto) {
+        User user;
+        try {
+            user = repository.findUserByUsername(userDto.getUsername())
+                    .orElseThrow(() -> new AuthenticationException("Invalid username"));
+        } catch (AuthenticationException e) {
+            throw new RuntimeException(e);
+        }
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        repository.save(user);
+    }
 }
