@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Note</title>
+</head>
+<body>
+<h1>Create Note</h1>
+<span th:text="${error}"></span>
+
+<form th:action="@{/notes/create}" method="post" th:object="${note}">
+    <label for="name">Name:</label>
+    <input type="text" placeholder="Ім'я нотатки. рядок, від 5 до 100 символів включно" id="name" name="name" th:field="*{name}"/><br/>
+    <label for="content">Content:</label>
+    <textarea id="content" placeholder="Вміст - рядок від 5 до 10 000 символів включно." name="content" th:field="*{content}"></textarea><br/>
+    <label for="noteType">Access Type:</label>
+    <select id="noteType" name="noteType" th:field="*{noteType}">
+        <option value="PUBLIC">PUBLIC</option>
+        <option value="PRIVATE">PRIVATE</option>
+    </select><br/>
+    <input type="submit" value="Create"/>
+</form>
+</body>
+</html>
