@@ -55,6 +55,9 @@
     </style>
 </head>
 <body>
+<a href="/mynotes">
+    <button type="button">Мої нотатки</button>
+</a>
 <h1>List of Thots</h1>
 <div th:each="Note : ${notes}" class="note">
     <div class="name" th:text="${Note.user.username}"></div>
