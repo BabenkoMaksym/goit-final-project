@@ -33,7 +33,7 @@ public class NoteController {
 
     @GetMapping("/edit")
     public ModelAndView showNoteForm(@RequestParam(name = "id", required = false) UUID id) {
-        ModelAndView result = new ModelAndView("note/edit");
+        ModelAndView result = new ModelAndView("notes/edit");
         Note note = new Note();
         if (id != null) {
             note = noteService.getById(id);
@@ -42,14 +42,20 @@ public class NoteController {
         return result;
     }
 
-    @PostMapping("/note/edit")
-    public String saveOrUpdateNote(@ModelAttribute("note") Note note) throws NoteCreateException {
-        if (note.getId() == null) {
-            noteService.add(note);
-        } else {
-            noteService.update(note);
+    @PostMapping("/edit")
+    public String saveOrUpdateNote(@ModelAttribute("note") Note note, Model model)  {
+        try {
+            if (note.getId() == null) {
+                noteService.add(note);
+            } else {
+                noteService.update(note);
+            }
+        } catch (NoteCreateException e) {
+            model.addAttribute("error", e.getMessage());
+            return "/notes/edit";
         }
-        return "redirect:/note/list";
+        model.addAttribute("note", note);
+        return "redirect:/notes/created";
     }
     @PostMapping("/delete")
     @ResponseBody
@@ -78,17 +84,22 @@ public class NoteController {
     @GetMapping("/create")
     public String showCreateNoteForm(Model model) {
         model.addAttribute("note", new Note());
-        return "note/create";
+        return "notes/create";
     }
 
     @PostMapping("/create")
-    public String createNote(@ModelAttribute("note") Note note, Model model,  Principal principal) throws NoteCreateException {
+    public String createNote(@ModelAttribute("note") Note note, Model model,  Principal principal)  {
         String name = principal.getName();
         note.setId(UUID.randomUUID());
         note.setUser(userRepository.findUserByUsername(name).get());
         note.setCreatedAt(LocalDateTime.now());
-        noteService.add(note);
+        try {
+            noteService.add(note);
+        } catch (NoteCreateException e) {
+            model.addAttribute("error", e.getMessage());
+            return "/notes/create";
+        }
         model.addAttribute("note", note);
-        return "note/created";
+        return "notes/created";
     }
 }
