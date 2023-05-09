@@ -25,9 +25,9 @@
             <span th:text="#{note.createdAt}"></span>
         </div>
         <div>
-            <a class="btn btn-success" th:href="@{/notes/mynotes/}">My notes</a>
-            <a class="btn btn-success" th:href="@{/notes/edit?id={#note.id}/}">Edit</a>
-            <a class="btn btn-success" th:href="@{/notes/delete?id={#note.id}/}">Remove</a>
+            <a th:href="@{/notes/mynotes/}"><button type="button">My notes</button></a>
+            <a th:href="@{/notes/edit?id={#note.id}/}"><button type="button">Edit</button></a>
+            <a th:href="@{/notes/delete?id={#note.id}/}"><button type="button">Remove</button></a>
         </div>
     </div>
 </body>
