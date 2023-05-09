@@ -10,6 +10,8 @@
 <body>
 <div class="container mt-4">
     <h1>Edit Note</h1>
+    <span th:text="${error}"></span>
+
     <form method="post" th:object="${note}" th:action="@{/note/edit}">
         <input type="hidden" id="id" name="id" th:value="${note.id}">
         <div class="form-group">
