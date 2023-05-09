@@ -47,7 +47,7 @@
 <body>
 <h1>List of Thots</h1>
 
-<a th:href="@{/notes/mynotes/}"><button type="button">My notes</button></a>
+<a th:href="@{/mynotes/}"><button type="button">My notes</button></a>
 
 <div th:each="Note : ${notes}" class="note">
     <div class="name" th:text="${Note.name}"></div>
