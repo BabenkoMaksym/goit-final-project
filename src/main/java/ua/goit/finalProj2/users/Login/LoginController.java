@@ -1,4 +1,4 @@
-package ua.goit.finalProj2.users.authentication;
+package ua.goit.finalProj2.users.Login;
 
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,35 +11,42 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import ua.goit.finalProj2.users.User;
 import ua.goit.finalProj2.users.UserService;
 import ua.goit.finalProj2.users.form_common.AuthenticationException;
-import ua.goit.finalProj2.users.form_common.UserDAO;
+import ua.goit.finalProj2.users.form_common.UserDto;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 @Controller
-@RequestMapping("/users/authentication")
+@RequestMapping("/login")
 @AllArgsConstructor
-public class UserAuthenticationController {
+public class LoginController {
 
     @Autowired
-    private final UserService service;
+    private final UserService userService;
+
+    @Autowired
+    private HttpServletRequest request;
 
     @GetMapping
-    public String get_authentication(Model model){
-        model.addAttribute("user", new UserDAO());
-        return "authentication";
+    public String getLogin(Model model){
+        String errorMessage = (String) request.getSession().getAttribute("error");
+        if (errorMessage != null) {
+            model.addAttribute("error", errorMessage);
+            request.getSession().removeAttribute("error");
+        }
+        model.addAttribute("userDto", new UserDto());
+        return "login";
     }
 
     @PostMapping
-    public String post_authentication(@ModelAttribute UserDAO userDAO, Model model){
-
-        System.out.println(userDAO);
-
+    public String postLogin(@ModelAttribute UserDto userDto, Model model){
         try {
-            User user = service.getUserByEmail(userDAO);
+            User user = userService.getUserByUsername(userDto);
         } catch (AuthenticationException e){
             model.addAttribute("error", e.getMessage());
-            return "authentication";
+            return "login";
         }
-
         return "/";
     }
+
 }
