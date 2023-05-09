@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import ua.goit.finalProj2.notes.repository.NoteRepository;
 
 import java.util.List;
 import java.util.Optional;

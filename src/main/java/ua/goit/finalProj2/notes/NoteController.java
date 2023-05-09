@@ -34,7 +34,7 @@ public class NoteController {
         return result;
     }
 
-    @PostMapping("/note/edit")
+    @PostMapping("/edit")
     public String saveOrUpdateNote(@ModelAttribute("note") Note note) {
         if (note.getId() == null) {
             noteService.add(note);
@@ -67,5 +67,12 @@ public class NoteController {
         List<Note> notes = noteService.listPublicNotes(page);
         model.addAttribute("notes", notes);
         return  "feed";
+    }
+
+    @GetMapping("/read")
+    public String readNote(@RequestParam("id") UUID id, Model model){
+        Note note = noteService.getById(id);
+        model.addAttribute("note", note);
+        return "read";
     }
 }

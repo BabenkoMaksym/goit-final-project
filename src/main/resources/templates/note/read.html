@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MyNotes</title>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
+</head>
+<body>
+    <h1>Note</h1>
+    <div th:class="center">
+        <div>
+            <label>Title</label>
+            <span th:text="#{note.name}"></span>
+        </div>
+        <div>
+            <label>Text</label>
+            <span th:text="#{note.content}"></span>
+        </div>
+        <div>
+            <label>Created at</label>
+            <span th:text="#{note.createdAt}"></span>
+        </div>
+        <div>
+            <a class="btn btn-success" th:href="@{/notes/mynotes/}">My notes</a>
+            <a class="btn btn-success" th:href="@{/notes/edit?id={#note.id}/}">Edit</a>
+            <a class="btn btn-success" th:href="@{/notes/delete?id={#note.id}/}">Remove</a>
+        </div>
+    </div>
+</body>
+</html>
