@@ -13,6 +13,8 @@
     <input type="text" placeholder="Ім'я нотатки. рядок, від 5 до 100 символів включно" id="name" name="name" th:field="*{name}"/><br/>
     <label for="content">Content:</label>
     <textarea id="content" placeholder="Вміст - рядок від 5 до 10 000 символів включно." name="content" th:field="*{content}"></textarea><br/>
+    <label for="keyWords">Content:</label>
+    <textarea id="keyWords" placeholder="Ключлві слова - рядок ключових слів розділених комами" name="keyWords" th:field="*{keyWords}"></textarea><br/>
     <label for="noteType">Access Type:</label>
     <select id="noteType" name="noteType" th:field="*{noteType}">
         <option value="PUBLIC">PUBLIC</option>
