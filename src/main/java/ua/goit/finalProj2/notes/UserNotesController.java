@@ -5,6 +5,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ua.goit.finalProj2.notes.form_common.NoteCreateException;
 import ua.goit.finalProj2.users.User;
 import ua.goit.finalProj2.users.UserService;
 import ua.goit.finalProj2.users.form_common.AuthenticationException;
@@ -42,7 +43,7 @@ public class UserNotesController {
                            @RequestParam String content,
                            @RequestParam(required = false, defaultValue = "PRIVATE") NoteType noteType,
                            @RequestParam(required = false, defaultValue = "#{T(java.time.LocalDateTime).now()}") LocalDateTime createdAt,
-                           Authentication authentication) {
+                           Authentication authentication) throws NoteCreateException {
         User user = userService.findByUsername(authentication.getName());
         Note note = null;
         if (id == null) {
@@ -71,7 +72,7 @@ public class UserNotesController {
     }
 
     @PostMapping("/edit")
-    public String editNote(@ModelAttribute Note note) {
+    public String editNote(@ModelAttribute Note note) throws NoteCreateException {
         noteService.update(note);
         return "redirect:/note/list";
     }
