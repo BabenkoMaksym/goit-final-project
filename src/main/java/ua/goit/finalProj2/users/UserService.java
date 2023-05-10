@@ -20,8 +20,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
 
-
-    public void createUser(UserDto userDto) throws AuthenticationException{
+    public void createUser(UserDto userDto) throws AuthenticationException {
         User user = repository.findUserByUsername(userDto.getUsername()).orElse(null);
         if (user != null) {
             throw new AuthenticationException("Користувач з таким логіном вже існує.");
@@ -54,4 +53,17 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         repository.save(user);
     }
+
+    public void changeEmail(UserDto userDto) {
+        User user;
+        try {
+            user = repository.findUserByUsername(userDto.getUsername())
+                    .orElseThrow(() -> new AuthenticationException("Invalid username"));
+        } catch (AuthenticationException e) {
+            throw new RuntimeException(e);
+        }
+        user.setEmail(userDto.getEmail());
+        repository.save(user);
+    }
 }
+

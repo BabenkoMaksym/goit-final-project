@@ -1,6 +1,5 @@
 package ua.goit.finalProj2.users.form_common;
 
-import org.springframework.ui.Model;
 
 public class UserValidate {
 
@@ -22,12 +21,12 @@ public class UserValidate {
                     " Довжина імені – від 5 до 50 символів включно.");
     }
 
-    private static void checkEmailValid(String email) throws AuthenticationException{
+    public static void checkEmailValid(String email) throws AuthenticationException{
         if(!email.matches(EMAIL_REGEX))
             throw new AuthenticationException("Не валідний Email.");
     }
 
-    private static void checkPasswordValid(String password) throws AuthenticationException{
+    public static void checkPasswordValid(String password) throws AuthenticationException{
         if(!password.matches(PASSWORD_REGEX))
             throw new AuthenticationException("Не валідний пароль." +
                     " Пароль користувача включає будь-які символи від 8 до 100 символів включно.");
