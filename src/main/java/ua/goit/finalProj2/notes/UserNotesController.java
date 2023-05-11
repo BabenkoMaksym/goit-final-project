@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-@Controller
-@RequestMapping("/note")
+
+
 public class UserNotesController {
     @Autowired
     private NoteService noteService;
@@ -71,11 +71,7 @@ public class UserNotesController {
         return "edit-user-notes";
     }
 
-    @PostMapping("/edit")
-    public String editNote(@ModelAttribute Note note) throws NoteCreateException {
-        noteService.update(note);
-        return "redirect:/note/list";
-    }
+
 
     @PostMapping("/delete")
     public String deleteNoteById(@RequestParam("id") UUID id) {

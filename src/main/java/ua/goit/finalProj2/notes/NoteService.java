@@ -34,7 +34,7 @@ public class NoteService {
         return noteRepository.save(note);
     }
 
-    public void deleteById(UUID id) {
+    public void deleteById(UUID id) throws IllegalArgumentException{
         if (!noteRepository.existsById(id)) {
             throw new IllegalArgumentException("Note with id " + id + " does not exist");
         }

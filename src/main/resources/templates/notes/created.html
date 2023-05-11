@@ -9,22 +9,20 @@
 
 <table>
   <tr>
-    <th>ID</th>
     <th>Name</th>
     <th>Content</th>
     <th>Access Type</th>
     <th>Created At</th>
   </tr>
   <tr>
-    <td th:text="${note.id}"></td>
-    <td th:text="${note.name}"></td>
+
     <td th:text="${note.content.length() > 200 ? note.content.substring(0, 200) + '...' : note.content}"></td>
     <td th:text="${note.noteType}"></td>
     <td th:text="${note.createdAt}"></td>
   </tr>
 </table>
 <div>
-  <a href="/mynotes">
+  <a href="/notes/my">
     <button type="button">Ok</button>
   </a>
 </div>
