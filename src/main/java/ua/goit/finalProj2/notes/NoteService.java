@@ -60,4 +60,8 @@ public class NoteService {
     public List<Note> listPublicNotes(Integer page){
         return noteRepository.findPublicNotes(PageRequest.of(page, 10));
     }
+
+    public List<Note> listOfNotesByUser(User user) {
+        return noteRepository.findByUser(user);
+    }
 }
