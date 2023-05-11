@@ -6,16 +6,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import ua.goit.finalProj2.notes.form_common.NoteCreateException;
 import ua.goit.finalProj2.users.User;
 import ua.goit.finalProj2.users.UserRepository;
 import ua.goit.finalProj2.users.UserService;
 import ua.goit.finalProj2.users.form_common.AuthenticationException;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -75,7 +71,7 @@ public class NoteController {
                 model.addAttribute("deleteMsg", e.getMessage());
             }
         }
-        return "notes/my";
+        return "redirect:/notes/my";
     }
 
     @GetMapping("/")

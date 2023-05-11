@@ -11,24 +11,30 @@
 </head>
 <body>
     <h1>Note</h1>
-    <div th:class="center">
+    <div th:class="center" th:object="${note}">
         <div>
             <label>Title</label>
-            <span th:text="#{note.name}"></span>
+            <textarea th:text="*{name}"></textarea>
         </div>
         <div>
             <label>Text</label>
-            <span th:text="#{note.content}"></span>
+            <textarea th:text="*{content}"></textarea>
         </div>
         <div>
             <label>Created at</label>
-            <span th:text="#{note.createdAt}"></span>
+            <span th:text="*{createdAt}"></span>
         </div>
         <div>
-            <a th:href="@{/notes/mynotes/}"><button type="button">My notes</button></a>
-            <a th:href="@{/notes/edit?id={#note.id}/}"><button type="button">Edit</button></a>
-            <a th:href="@{/notes/delete?id={#note.id}/}"><button type="button">Remove</button></a>
+        <td>
+            <a class="btn btn-primary" th:href="@{/notes/my}">My Notes</a>
+            <a class="btn btn-secondary" th:href="@{/notes/edit(id=*{id})}">Edit</a>
+            <form th:action="@{/notes/delete}" method="post" style="display: inline-block;">
+                <input type="hidden" name="id" th:value="${note.id}">
+                <button class="btn btn-danger" type="submit">Delete</button>
+            </form>
+        </td>
         </div>
+
     </div>
 </body>
 </html>
