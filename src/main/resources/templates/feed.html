@@ -41,18 +41,38 @@
             max-width: none;
             white-space: normal;
         }
+        .page-navigation {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 16px;
+        }
+        .page-number {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 0 16px;
+        }
     </style>
     <link th:rel="stylesheet" th:href="@{webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>
 </head>
 <body>
+<a href="/mynotes">
+    <button type="button">Мої нотатки</button>
+</a>
 <h1>List of Thots</h1>
 
 <a th:href="@{/mynotes/}"><button type="button">My notes</button></a>
 
 <div th:each="Note : ${notes}" class="note">
+    <div class="name" th:text="${Note.user.username}"></div>
     <div class="name" th:text="${Note.name}"></div>
     <div class="content collapsed" th:text="${Note.content}"></div>
-    <button class="expand-button" onclick="expandContent(this)">Переглянути повністю</button>
+    <button class="expand-button" onclick="expandContent(this)">Expand</button>
+</div>
+<div class="page-navigation">
+    <button onclick="previousPage()" th:disabled="${page == 1}">Previous Page</button>
+    <div class="page-number" th:text="${page}"></div>
+    <button onclick="nextPage()">Next Page</button>
 </div>
 <script>
     function expandContent(button) {
@@ -60,14 +80,35 @@
         var content = note.getElementsByClassName("content")[0];
         content.classList.toggle("expanded");
         if (content.classList.contains("expanded")) {
-            button.textContent = "Згорнути";
+            button.textContent = "Collapse";
         } else {
-            button.textContent = "Переглянути повністю";
+            button.textContent = "Expand";
         }
+    }
+
+    function previousPage() {
+        const url = new URL(window.location.href);
+        const searchParams = url.searchParams;
+        let page = parseInt(searchParams.get('page')) || 1;
+        page--;
+        searchParams.set('page', page);
+        url.search = searchParams.toString();
+        window.location.href = url.toString();
+    }
+
+    function nextPage() {
+        const url = new URL(window.location.href);
+        const searchParams = url.searchParams;
+        let page = parseInt(searchParams.get('page')) || 1;
+        page++;
+        searchParams.set('page', page);
+        url.search = searchParams.toString();
+        window.location.href = url.toString();
     }
 </script>
 </body>
 </html>
+
 
 <!--        <td> <form method="get" action="http://localhost:8080/note/edit">-->
 <!--            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
