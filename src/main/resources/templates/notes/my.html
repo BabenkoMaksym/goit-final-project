@@ -16,9 +16,9 @@
         </div>
         <div class="col-md-6 text-end">
             <a class="btn btn-primary" href="/notes/create">Create</a>
+            <a class="btn btn-primary" href="/notes/">Feed</a>
         </div>
     </div>
-    <span th:text="${deleteMsg}"></span>
     <table class="table mt-3">
         <thead>
         <tr>
@@ -36,7 +36,7 @@
             <td>
                 <a class="btn btn-primary" th:href="@{/notes/read(id=${note.id})}">Read</a>
                 <a class="btn btn-secondary" th:href="@{/notes/edit(id=${note.id})}">Edit</a>
-                <a class="btn btn-secondary" th:href="@{/notes/copy-link(id=${note.id})}">Copy Link</a>
+                <a class="btn btn-secondary" th:href="@{/notes/share(id=${note.id})}">Copy Link</a>
                 <form th:action="@{/notes/delete}" method="post" style="display: inline-block;">
                     <input type="hidden" name="id" th:value="${note.id}">
                     <button class="btn btn-danger" type="submit">Delete</button>

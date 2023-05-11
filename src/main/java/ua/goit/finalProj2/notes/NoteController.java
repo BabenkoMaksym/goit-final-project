@@ -79,14 +79,18 @@ public class NoteController {
         page = page == null ? 0 : page >= 1 ? page - 1 : page;
         List<Note> notes = noteService.listPublicNotes(page);
         model.addAttribute("notes", notes);
-        return "feed";
+        return "notes/feed";
     }
 
     @GetMapping("/read")
-    public String readNote(@RequestParam("id") UUID id, Model model) {
+    public String readNote(@RequestParam("id") UUID id, Model model, Authentication authentication) {
         Note note = noteService.getById(id);
+        if (note.getNoteType() == NoteType.PRIVATE && !authentication.getName().equals(note.getUser().getUsername())) {
+            return "redirect:/notes/notfound";
+        }
         model.addAttribute("note", note);
         return "notes/read";
+
     }
 
     @GetMapping("/create")
@@ -119,4 +123,24 @@ public class NoteController {
         return "notes/my";
     }
 
+    @GetMapping("/notfound")
+    public String noteNotFound() {
+        return "notes/noteNotFound";
+    }
+
+    @GetMapping("/share")
+    public String share(@RequestParam("id") UUID id, Model model) {
+        Note note = noteService.getById(id);
+        if (note == null || note.getNoteType() == NoteType.PRIVATE) {
+            return "redirect:/notes/notfound";
+        }
+        model.addAttribute("note", note);
+        return "notes/share";
+    }
+
+    @PostMapping("/{id}/clipboard")
+    public void saveNoteToClipboard(@PathVariable UUID id) {
+        Note note = noteService.getById(id);
+        noteService.copyNoteLinkToClipboard(note);
+    }
 }

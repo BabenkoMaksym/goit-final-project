@@ -13,12 +13,16 @@
     <h1>Note</h1>
     <div th:class="center" th:object="${note}">
         <div>
-            <label>Title</label>
-            <textarea th:text="*{name}"></textarea>
+            <label>Name</label>
+            <label>
+                <textarea th:text="*{name}"></textarea>
+            </label>
         </div>
         <div>
-            <label>Text</label>
-            <textarea th:text="*{content}"></textarea>
+            <label>Content</label>
+            <label>
+                <textarea th:text="*{content}"></textarea>
+            </label>
         </div>
         <div>
             <label>Created at</label>

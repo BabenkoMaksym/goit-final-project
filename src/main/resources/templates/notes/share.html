@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Note Sharing</title>
+    <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css}" />
+</head>
+<body>
+<div class="container">
+    <h1 class="my-4">Note Sharing</h1>
+    <div class="card">
+        <div class="card-header">
+            <h2>Name</h2>
+        </div>
+        <div class="card-body">
+            <p class="card-text" th:text="${note.content}"></p>
+        </div>
+        <div class="card-footer">
+            <p th:if="${note.noteType} == 'PUBLIC'">
+                Link to this note has been copied to your clipboard.
+            </p>
+            <p th:if="${note.noteType} == 'PRIVATE'">
+                Note not found.
+            </p>
+            <button class="btn btn-primary" onclick="location.href='/notes/my'">
+                My Notes
+            </button>
+        </div>
+    </div>
+</div>
+</body>
+</html>
