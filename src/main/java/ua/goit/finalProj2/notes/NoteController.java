@@ -2,14 +2,18 @@ package ua.goit.finalProj2.notes;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+import ua.goit.finalProj2.notes.form_common.NoteCreateException;
+import ua.goit.finalProj2.users.User;
+import ua.goit.finalProj2.users.UserRepository;
+import ua.goit.finalProj2.users.UserService;
+import ua.goit.finalProj2.users.form_common.AuthenticationException;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.UUID;
 
 @Controller
@@ -19,53 +23,100 @@ public class NoteController {
     private NoteService noteService;
 
     @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
     public void setNoteService(NoteService noteService) {
         this.noteService = noteService;
     }
 
     @GetMapping("/edit")
-    public ModelAndView showNoteForm(@RequestParam(name = "id", required = false) UUID id) {
-        ModelAndView result = new ModelAndView("note/edit");
+    public String showNoteForm(@RequestParam(name = "id", required = false) UUID id, Model model) {
         Note note = new Note();
         if (id != null) {
             note = noteService.getById(id);
         }
-        result.addObject("note", note);
-        return result;
+        model.addAttribute("note", note);
+        return "notes/edit";
     }
 
-    @PostMapping("/note/edit")
-    public String saveOrUpdateNote(@ModelAttribute("note") Note note) {
-        if (note.getId() == null) {
-            noteService.add(note);
-        } else {
-            noteService.update(note);
+    @PostMapping("/edit")
+    public String saveOrUpdateNote(@ModelAttribute("note") Note note, Model model, Authentication authentication) {
+        String name = authentication.getName();
+        note.setCreatedAt(LocalDateTime.now());
+        note.setUser(userRepository.findUserByUsername(name).get());
+        try {
+            if (note.getId() == null) {
+                noteService.add(note);
+            } else {
+                noteService.update(note);
+            }
+        } catch (NoteCreateException e) {
+            model.addAttribute("error", e.getMessage());
+            return "notes/edit";
         }
-        return "redirect:/note/list";
+        model.addAttribute("note", note);
+        return "notes/created";
     }
 
     @PostMapping("/delete")
-    @ResponseBody
-    public void deleteNote (@RequestParam("id") UUID id, HttpServletResponse resp){
-        try{
-            noteService.deleteById(id);
-        } catch (IllegalArgumentException e){
-            resp.setHeader("deleteError", e.getMessage());
+    public String deleteNote(@RequestParam("id") UUID id, Model model) {
+        if (id != null) {
+            try {
+                noteService.deleteById(id);
+            } catch (IllegalArgumentException e) {
+                model.addAttribute("deleteMsg", e.getMessage());
+            }
         }
-        try {
-            resp.sendRedirect("http://localhost:9999/note/list");
-            resp.setHeader("Location", "/note/list");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return "redirect:/notes/my";
     }
 
-
     @GetMapping("/")
-    public String feedNotes(@RequestParam(name = "page", required = false) Integer page, Model model){
+    public String feedNotes(@RequestParam(name = "page", required = false) Integer page, Model model) {
         page = page == null ? 0 : page >= 1 ? page - 1 : page;
         List<Note> notes = noteService.listPublicNotes(page);
         model.addAttribute("notes", notes);
-        return  "feed";
+        return "feed";
     }
+
+    @GetMapping("/read")
+    public String readNote(@RequestParam("id") UUID id, Model model) {
+        Note note = noteService.getById(id);
+        model.addAttribute("note", note);
+        return "notes/read";
+    }
+
+    @GetMapping("/create")
+    public String showCreateNoteForm(Model model) {
+        model.addAttribute("note", new Note());
+        return "notes/create";
+    }
+
+    @PostMapping("/create")
+    public String createNote(@ModelAttribute("note") Note note, Model model, Authentication authentication) {
+        String name = authentication.getName();
+        note.setId(UUID.randomUUID());
+        note.setUser(userRepository.findUserByUsername(name).get());
+        note.setCreatedAt(LocalDateTime.now());
+        try {
+            noteService.add(note);
+        } catch (NoteCreateException e) {
+            model.addAttribute("error", e.getMessage());
+            return "/notes/create";
+        }
+        model.addAttribute("note", note);
+        return "notes/created";
+    }
+
+    @GetMapping("/my")
+    public String showAllUserNotes(Model model, Authentication authentication) throws AuthenticationException {
+        User user = userService.authorizeUser(authentication.isAuthenticated());
+        List<Note> notes = noteService.listOfNotesByUser(user);
+        model.addAttribute("notes", notes);
+        return "notes/my";
+    }
+
 }
