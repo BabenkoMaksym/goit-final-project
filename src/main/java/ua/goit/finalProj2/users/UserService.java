@@ -47,6 +47,30 @@ public class UserService {
         return repository.getUserByUsername(userDto);
     }
 
+    public void changePassword(UserDto userDto) {
+        User user;
+        try {
+            user = repository.findUserByUsername(userDto.getUsername())
+                    .orElseThrow(() -> new AuthenticationException("Invalid username"));
+        } catch (AuthenticationException e) {
+            throw new RuntimeException(e);
+        }
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        repository.save(user);
+    }
+
+    public void changeEmail(UserDto userDto) {
+        User user;
+        try {
+            user = repository.findUserByUsername(userDto.getUsername())
+                    .orElseThrow(() -> new AuthenticationException("Invalid username"));
+        } catch (AuthenticationException e) {
+            throw new RuntimeException(e);
+        }
+        user.setEmail(userDto.getEmail());
+        repository.save(user);
+    }
+
     public User authorizeUser(boolean authenticated) throws AuthenticationException {
         if (!authenticated) {
             throw new AuthenticationException("User is not authenticated");

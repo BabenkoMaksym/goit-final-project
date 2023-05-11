@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+</head>
+<body>
+<h1>User Profile</h1>
+<span th:text ="${error}"></span>
+<p>Username: <span th:text="${user.username}"/></p>
+<p>Email: <span th:text="${user.email}"/></p>
+<p>Total Notes: <span th:text="${user.notes.size()}"/></p>
+
+<form th:action="@{/changeEmail}" method="get">
+    <input type="hidden" name="username" th:value="${user.username}"/>
+    <button type="submit">Change Email</button>
+</form>
+
+<form th:action="@{/changePassword}" method="get">
+    <input type="hidden" name="username" th:value="${user.username}"/>
+    <button type="submit">Change Password</button>
+</form>
+
+<form th:action="@{/logout}" method="post">
+    <button type="submit">Logout</button>
+</form>
+</body>
+</html>
