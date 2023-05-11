@@ -3,6 +3,7 @@ package ua.goit.finalProj2.users;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import ua.goit.finalProj2.notes.Note;
 
@@ -24,7 +25,7 @@ public class User {
     UserRole role;
     boolean enabled;
 
-
+    @ToString.Exclude
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
     List<Note> notes;
 
