@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import ua.goit.finalProj2.users.User;
 import ua.goit.finalProj2.users.UserRepository;
 import ua.goit.finalProj2.users.UserRole;
-import ua.goit.finalProj2.users.UserService;
 
 import java.security.Principal;
 import java.util.List;
