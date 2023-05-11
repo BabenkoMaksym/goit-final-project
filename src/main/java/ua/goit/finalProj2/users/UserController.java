@@ -9,35 +9,31 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ua.goit.finalProj2.users.form_common.AuthenticationException;
 import ua.goit.finalProj2.users.form_common.UserDto;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.security.Principal;
 
-import static ua.goit.finalProj2.users.form_common.UserValidate.*;
+import static ua.goit.finalProj2.users.form_common.UserValidate.checkEmailValid;
+import static ua.goit.finalProj2.users.form_common.UserValidate.checkPasswordValid;
 
 @Data
 @Controller
+@RequestMapping("/profile")
 public class UserController {
 
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
 
-    @GetMapping("/profile")
-    public String showProfile(Model model, Principal principal) {
-        String username = principal.getName();
-        UserDto userDto = new UserDto();
-        userDto.setUsername(username);
+    @GetMapping("/")
+    public String showProfile(Model model, Authentication authentication) {
+        String username = authentication.getName();
         User user;
-        try {
-            user = userService.getUserByUsername(userDto);
-            user.setPassword(null);
-        } catch (AuthenticationException e) {
-            throw new RuntimeException(e);
-        }
+        user = userService.findByUsername(username);
+        user.setPassword(null);
         model.addAttribute("user", user);
         return "profile";
     }
@@ -59,12 +55,12 @@ public class UserController {
             UserDto userDto = new UserDto();
             userDto.setUsername(username);
             userDto.setPassword(oldPassword);
-            User user = userService.getUserByUsername(userDto);
+            User user = userService.findByUsername(username);
             if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
                 throw new AuthenticationException("Неправильний старий пароль!");
             }
             if (!newPassword.equals(confirmPassword)) {
-                throw new AuthenticationException("Новий пароль не збігаєтся!");
+                throw new AuthenticationException("Новий пароль не співпадає в двох полях!");
             }
             checkPasswordValid(newPassword);
             userDto.setPassword(newPassword);
@@ -74,7 +70,7 @@ public class UserController {
             model.addAttribute("error", e.getMessage());
             return "changePassword";
         }
-        return "redirect:/profile";
+        return "redirect:/profile/";
     }
 
     @GetMapping("/changeEmail")
@@ -85,11 +81,12 @@ public class UserController {
 
     @PostMapping("/changeEmail")
     public String changeEmail(@RequestParam String username, @RequestParam String newEmail, @RequestParam String password, Model model) {
+
         try {
             UserDto userDto = new UserDto();
             userDto.setUsername(username);
             userDto.setPassword(password);
-            User user = userService.getUserByUsername(userDto);
+            User user = userService.findByUsername(username);
             checkEmailValid(newEmail);
             userDto.setEmail(newEmail);
             userService.changeEmail(userDto);
@@ -101,7 +98,7 @@ public class UserController {
             model.addAttribute("error", e.getMessage());
             return "changeEmail";
         }
-        return "redirect:/profile";
+        return "redirect:/profile/";
     }
 
     @PostMapping("/logout")

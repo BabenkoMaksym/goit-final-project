@@ -11,12 +11,12 @@
 <p>Email: <span th:text="${user.email}"/></p>
 <p>Total Notes: <span th:text="${user.notes.size()}"/></p>
 
-<form th:action="@{/changeEmail}" method="get">
+<form th:action="@{/profile/changeEmail}" method="get">
     <input type="hidden" name="username" th:value="${user.username}"/>
     <button type="submit">Change Email</button>
 </form>
 
-<form th:action="@{/changePassword}" method="get">
+<form th:action="@{/profile/changePassword}" method="get">
     <input type="hidden" name="username" th:value="${user.username}"/>
     <button type="submit">Change Password</button>
 </form>
