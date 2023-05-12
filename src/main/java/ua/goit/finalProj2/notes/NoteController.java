@@ -105,6 +105,7 @@ public class NoteController {
         note.setId(UUID.randomUUID());
         note.setUser(userRepository.findUserByUsername(name).get());
         note.setCreatedAt(LocalDateTime.now());
+
         try {
             noteService.add(note);
         } catch (NoteCreateException e) {
