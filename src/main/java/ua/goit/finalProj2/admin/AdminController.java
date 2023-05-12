@@ -40,9 +40,18 @@ public class AdminController {
     public String changeUserRole(@RequestParam("username") String username,
                                  @RequestParam("role") UserRole role) {
         User user = userRepository.findUserByUsername(username).get();
-        System.out.println(user.getEmail());
         user.setRole(role);
         userRepository.save(user);
         return "redirect:/admin/users";
     }
+
+    @PostMapping("/admin/change-enabled")
+    public String changeUserEnabledStatus(@RequestParam("username") String username,
+                                          @RequestParam(name = "enabled", required = false) boolean enabled) {
+        User user = userRepository.findUserByUsername(username).get();
+        user.setEnabled(enabled);
+        userRepository.save(user);
+        return "redirect:/admin/users";
+    }
+
 }

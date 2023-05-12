@@ -15,6 +15,7 @@
         <th>Email</th>
         <th>Role</th>
         <th>Enabled</th>
+        <th>Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -23,6 +24,14 @@
         <td th:text="${user.username}"></td>
         <td th:text="${user.email}"></td>
         <td th:text="${user.getRole()}"></td>
+        <td th:text="${user.isEnabled()}"></td>
+        <td>
+            <form th:action="@{/admin/change-enabled}" method="post">
+                <input type="hidden" name="username" th:value="${user.getUsername()}"/>
+                <input type="checkbox" name="enabled" th:checked="${user.enabled}" />
+                <button type="submit">Update</button>
+            </form>
+        </td>
         <td>
             <form th:action="@{/admin/change-role}" method="post">
                 <input type="hidden" name="username" th:value="${user.getUsername()}"/>
@@ -30,10 +39,9 @@
                     <option th:selected="${user.getRole() == 'USER'}" value="USER">USER</option>
                     <option th:selected="${user.getRole() == 'ADMIN'}" value="ADMIN">ADMIN</option>
                 </select>
-                <button type="submit">Изменить</button>
+                <button type="submit">Update</button>
             </form>
         </td>
-        <td th:text="${user.enabled}"></td>
     </tr>
     </tbody>
 </table>
