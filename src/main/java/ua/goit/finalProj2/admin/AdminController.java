@@ -12,8 +12,6 @@ import ua.goit.finalProj2.users.UserRole;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @Controller("admin")
 public class AdminController {
@@ -38,20 +36,37 @@ public class AdminController {
 
     @PostMapping("/admin/change-role")
     public String changeUserRole(@RequestParam("username") String username,
-                                 @RequestParam("role") UserRole role) {
+                                 @RequestParam("role") UserRole role,
+                                 Principal principal, Model model) {
+        User currentUser = userRepository.findUserByUsername(principal.getName()).get();
         User user = userRepository.findUserByUsername(username).get();
+        if (user.equals(currentUser)) {
+            model.addAttribute("error", "You cannot change your own role.");
+            List<User> users = userRepository.findAll();
+            model.addAttribute("users", users);
+            return "admin";
+        }
         user.setRole(role);
         userRepository.save(user);
         return "redirect:/admin/users";
     }
 
+
     @PostMapping("/admin/change-enabled")
     public String changeUserEnabledStatus(@RequestParam("username") String username,
-                                          @RequestParam(name = "enabled", required = false) boolean enabled) {
+                                          @RequestParam(name = "enabled", required = false) boolean enabled,
+                                          Principal principal, Model model)
+    {
+        User currentUser = userRepository.findUserByUsername(principal.getName()).get();
         User user = userRepository.findUserByUsername(username).get();
+        if (user.equals(currentUser)) {
+            model.addAttribute("error", "You cannot change your own enabled status");
+            List<User> users = userRepository.findAll();
+            model.addAttribute("users", users);
+            return "admin";
+        }
         user.setEnabled(enabled);
         userRepository.save(user);
         return "redirect:/admin/users";
     }
-
 }
