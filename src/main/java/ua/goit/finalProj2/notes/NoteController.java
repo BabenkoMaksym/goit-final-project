@@ -117,7 +117,7 @@ public class NoteController {
             model.addAttribute("error", e.getMessage());
             return "/notes/create";
         }
-        model.addAttribute("note", note);
+        model.addAttribute("noteDTO", noteDTO);
         return "notes/created";
     }
 

@@ -2,11 +2,13 @@ package ua.goit.finalProj2.notes;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.annotations.Type;
+
+import ua.goit.finalProj2.notes.keyWords.KeyWords;
 import ua.goit.finalProj2.users.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,9 +27,10 @@ public class Note {
     @Column(name = "content")
     String content;
 
-    @ElementCollection
-    @Column(name = "key_words")
-    private List<String> keyWords;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "note_id")
+    List<KeyWords> keyWords = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     @Column(name = "access_type")

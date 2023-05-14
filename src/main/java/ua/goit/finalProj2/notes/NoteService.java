@@ -8,14 +8,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 //import ua.goit.finalProj2.notes.form_common.NoteCreateException;
 import ua.goit.finalProj2.notes.form_common.NoteCreateException;
+import ua.goit.finalProj2.notes.keyWords.KeyWords;
 import ua.goit.finalProj2.users.User;
 //import static ua.goit.finalProj2.notes.form_common.NoteValidate.validateNoteCreating;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
+import java.util.*;
 
 
 import static org.thymeleaf.util.StringUtils.join;
@@ -74,7 +71,7 @@ public class NoteService {
         note.setName(dto.getName());
         note.setNoteType(dto.getNoteType());
         note.setContent(dto.getContent());
-        note.setKeyWords(Arrays.asList(dto.getKeyWords().split(", ")));
+        note.setKeyWords(transformToKeyWords(dto.getKeyWords()));
         note.setCreatedAt(dto.getCreatedAt());
         note.setUser(dto.getUser());
         return note;
@@ -88,7 +85,25 @@ public class NoteService {
         dto.setContent(note.getContent());
         dto.setCreatedAt(note.getCreatedAt());
         dto.setNoteType(note.getNoteType());
-        dto.setKeyWords(join(note.getKeyWords(),", "));
+        dto.setKeyWords(transformFromKeyWords(note.getKeyWords()));
         return dto;
+    }
+    private List<KeyWords> transformToKeyWords(String line){
+       List<KeyWords> list = new ArrayList<KeyWords>();
+       String[] words = line.split(", ");
+        for (String word : words) {
+            KeyWords keyWords = new KeyWords();
+            if(word.isBlank())continue;
+            keyWords.setWord(word);
+            list.add(keyWords);
+        }
+        return list;
+    }
+    private String transformFromKeyWords(List<KeyWords> words){
+        StringBuilder line = new StringBuilder();
+        for (KeyWords word: words){
+            line.append(word.getWord()).append(", ");
+        }
+        return line.toString();
     }
 }
