@@ -17,6 +17,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static jdk.internal.joptsimple.internal.Strings.join;
 import static ua.goit.finalProj2.notes.form_common.NoteValidate.validateNoteCreating;
 
 @Service
@@ -76,5 +77,17 @@ public class NoteService {
         note.setCreatedAt(dto.getCreatedAt());
         note.setUser(dto.getUser());
         return note;
+    }
+
+    public NoteDTO getNoteDTOFromNote(Note note){
+        NoteDTO dto = new NoteDTO();
+        dto.setId(note.getId());
+        dto.setUser(note.getUser());
+        dto.setName(note.getName());
+        dto.setContent(note.getContent());
+        dto.setCreatedAt(note.getCreatedAt());
+        dto.setNoteType(note.getNoteType());
+        dto.setKeyWords(join(note.getKeyWords(),", "));
+        return dto;
     }
 }
