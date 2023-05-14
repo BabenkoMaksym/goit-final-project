@@ -64,6 +64,15 @@ public class NoteService {
     public List<Note> listOfNotesByUser(User user) {
         return noteRepository.findByUser(user);
     }
+    public List<NoteDTO> listOfNoteDTOsByUser(User user) {
+      List<Note> notes =   noteRepository.findByUser(user);
+      List<NoteDTO> noteDTOs= new ArrayList<>();
+      for (Note note : notes){
+          noteDTOs.add(getNoteDTOFromNote(note));
+      }
+      return noteDTOs;
+    }
+
 
     public Note getNoteFromDTO(NoteDTO dto) {
         Note note = new Note();

@@ -40,7 +40,7 @@ public class NoteController {
             note = noteService.getById(id);
         }
         NoteDTO noteDTO = noteService.getNoteDTOFromNote(note);
-        model.addAttribute("noteDTO", noteDTO);
+        model.addAttribute("note", noteDTO);
         return "notes/edit";
     }
 
@@ -61,7 +61,7 @@ public class NoteController {
             return "notes/edit";
         }
 
-        model.addAttribute("noteDTO", noteDTO);
+        model.addAttribute("note", noteDTO);
         return "notes/created";
     }
 
@@ -87,23 +87,24 @@ public class NoteController {
 
     @GetMapping("/read")
     public String readNote(@RequestParam("id") UUID id, Model model, Authentication authentication) {
-        Note note = noteService.getById(id);
-        if (note.getNoteType() == NoteType.PRIVATE && !authentication.getName().equals(note.getUser().getUsername())) {
+        NoteDTO noteDTO = noteService.getNoteDTOFromNote(noteService.getById(id));
+        if (noteDTO.getNoteType() == NoteType.PRIVATE && !authentication.getName().equals(noteDTO.getUser().getUsername())) {
             return "redirect:/notes/notfound";
         }
-        model.addAttribute("note", note);
+
+        model.addAttribute("note", noteDTO);
         return "notes/read";
 
     }
 
     @GetMapping("/create")
     public String showCreateNoteForm(Model model) {
-        model.addAttribute("notedto", new NoteDTO());
+        model.addAttribute("note", new NoteDTO());
         return "notes/create";
     }
 
     @PostMapping("/create")
-    public String createNote(@ModelAttribute("notedto") NoteDTO noteDTO, Model model, Authentication authentication) {
+    public String createNote(@ModelAttribute("note") NoteDTO noteDTO, Model model, Authentication authentication) {
 
         String name = authentication.getName();
         noteDTO.setId(UUID.randomUUID());
@@ -117,14 +118,14 @@ public class NoteController {
             model.addAttribute("error", e.getMessage());
             return "/notes/create";
         }
-        model.addAttribute("noteDTO", noteDTO);
+        model.addAttribute("note", noteDTO);
         return "notes/created";
     }
 
     @GetMapping("/my")
     public String showAllUserNotes(Model model, Authentication authentication) throws AuthenticationException {
         User user = userService.authorizeUser(authentication.isAuthenticated());
-        List<Note> notes = noteService.listOfNotesByUser(user);
+        List<NoteDTO> notes = noteService.listOfNoteDTOsByUser(user);
         model.addAttribute("notes", notes);
         return "notes/my";
     }
