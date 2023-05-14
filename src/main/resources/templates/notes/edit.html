@@ -12,11 +12,15 @@
     <h1>Edit Note</h1>
     <span th:text="${error}"></span>
 
-    <form method="post" th:object="${note}" th:action="@{/notes/edit}">
+    <form method="post" th:object="${noteDTO}" th:action="@{/notes/edit}">
         <input type="hidden" id="id" name="id" th:value="${note.id}">
         <div class="form-group">
             <label for="name">Title:</label>
             <input type="text" id="name" name="name" class="form-control" th:value="${note.name}">
+        </div>
+        <div class="form-group">
+            <label for="name">Title:</label>
+            <input type="text" id="keyWords" name="keyWords" class="form-control" th:value="${note.keyWords}">
         </div>
         <div class="form-group">
             <label for="content">Content:</label>

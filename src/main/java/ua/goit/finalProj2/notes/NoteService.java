@@ -17,7 +17,8 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static jdk.internal.joptsimple.internal.Strings.join;
+
+import static org.thymeleaf.util.StringUtils.join;
 import static ua.goit.finalProj2.notes.form_common.NoteValidate.validateNoteCreating;
 
 @Service

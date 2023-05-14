@@ -39,17 +39,19 @@ public class NoteController {
         if (id != null) {
             note = noteService.getById(id);
         }
-        model.addAttribute("note", note);
+        NoteDTO noteDTO = noteService.getNoteDTOFromNote(note);
+        model.addAttribute("noteDTO", noteDTO);
         return "notes/edit";
     }
 
     @PostMapping("/edit")
-    public String saveOrUpdateNote(@ModelAttribute("note") Note note, Model model, Authentication authentication) {
+    public String saveOrUpdateNote(@ModelAttribute("note") NoteDTO noteDTO, Model model, Authentication authentication) {
         String name = authentication.getName();
-        note.setCreatedAt(LocalDateTime.now());
-        note.setUser(userRepository.findUserByUsername(name).get());
+        noteDTO.setCreatedAt(LocalDateTime.now());
+        noteDTO.setUser(userRepository.findUserByUsername(name).get());
+        Note note = noteService.getNoteFromDTO(noteDTO);
         try {
-            if (note.getId() == null) {
+            if (noteDTO.getId() == null) {
                 noteService.add(note);
             } else {
                 noteService.update(note);
@@ -58,7 +60,8 @@ public class NoteController {
             model.addAttribute("error", e.getMessage());
             return "notes/edit";
         }
-        model.addAttribute("note", note);
+
+        model.addAttribute("noteDTO", noteDTO);
         return "notes/created";
     }
 
@@ -107,7 +110,7 @@ public class NoteController {
         noteDTO.setUser(userRepository.findUserByUsername(name).get());
         noteDTO.setCreatedAt(LocalDateTime.now());
         Note note = noteService.getNoteFromDTO(noteDTO);
-
+        System.out.println("note = " + note);
         try {
             noteService.add(note);
         } catch (NoteCreateException e) {
