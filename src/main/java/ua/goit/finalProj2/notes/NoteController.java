@@ -138,8 +138,8 @@ public class NoteController {
         return "notes/share";
     }
 
-    @PostMapping("/{id}/clipboard")
-    public void saveNoteToClipboard(@PathVariable UUID id) {
+    @PostMapping("/share")
+    public void saveNoteToClipboard(@RequestParam UUID id) {
         Note note = noteService.getById(id);
         noteService.copyNoteLinkToClipboard(note);
     }
