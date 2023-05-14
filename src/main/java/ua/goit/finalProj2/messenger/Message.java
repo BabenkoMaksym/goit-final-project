@@ -19,6 +19,9 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
+@Column(name = "message")
+    String content;
+
     @ManyToOne
     @JoinColumn(name = "sender_user_id")
     @ToString.Exclude
