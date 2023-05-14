@@ -95,16 +95,18 @@ public class NoteController {
 
     @GetMapping("/create")
     public String showCreateNoteForm(Model model) {
-        model.addAttribute("note", new Note());
+        model.addAttribute("notedto", new NoteDTO());
         return "notes/create";
     }
 
     @PostMapping("/create")
-    public String createNote(@ModelAttribute("note") Note note, Model model, Authentication authentication) {
+    public String createNote(@ModelAttribute("notedto") NoteDTO noteDTO, Model model, Authentication authentication) {
+
         String name = authentication.getName();
-        note.setId(UUID.randomUUID());
-        note.setUser(userRepository.findUserByUsername(name).get());
-        note.setCreatedAt(LocalDateTime.now());
+        noteDTO.setId(UUID.randomUUID());
+        noteDTO.setUser(userRepository.findUserByUsername(name).get());
+        noteDTO.setCreatedAt(LocalDateTime.now());
+        Note note = noteService.getNoteFromDTO(noteDTO);
 
         try {
             noteService.add(note);

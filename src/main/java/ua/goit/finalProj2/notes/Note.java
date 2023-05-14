@@ -40,9 +40,4 @@ public class Note {
 
     @Column(name = "created_at")
     LocalDateTime createdAt;
-
-    @Transient
-    @ToString.Exclude
-    KeyWordDTO keyWordDTO;
-
 }

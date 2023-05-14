@@ -10,16 +10,16 @@
     <h1>Create New Note</h1>
     <span th:text="${error}"></span>
 
-    <form th:action="@{/notes/create}" method="post" th:object="${note}">
+    <form th:action="@{/notes/create}" method="post" th:object="${notedto}">
         <div class="mb-3">
             <label for="name" class="form-label">Name</label>
             <input type="text" class="form-control" placeholder="Ім'я нотатки. рядок, від 5 до 100 символів включно"
                    id="name" name="name" th:field="*{name}"/><br/>
         </div>
         <div class="mb-3">
-            <label for="keyWordDTO" class="form-label">KeyWords</label>
+            <label for="keyWords" class="form-label">keyWords</label>
             <input type="text" class="form-control" placeholder="Ключові слова нотатки, перелічені через кому. Рядок, від 5 до 50 символів включно"
-                   id="keyWordDTO" name="keyWordDTO" th:field="*{keyWordDTO}"/><br/>
+                   id="keyWords" name="keyWords" th:field="*{keyWords}"/><br/>
         </div>
         <div class="mb-3">
             <label for="content" class="form-label">Content:</label>

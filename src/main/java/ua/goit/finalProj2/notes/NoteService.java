@@ -11,6 +11,7 @@ import ua.goit.finalProj2.notes.form_common.NoteCreateException;
 import ua.goit.finalProj2.users.User;
 //import static ua.goit.finalProj2.notes.form_common.NoteValidate.validateNoteCreating;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -63,5 +64,17 @@ public class NoteService {
 
     public List<Note> listOfNotesByUser(User user) {
         return noteRepository.findByUser(user);
+    }
+
+    public Note getNoteFromDTO(NoteDTO dto) {
+        Note note = new Note();
+        note.setId(dto.getId());
+        note.setName(dto.getName());
+        note.setNoteType(dto.getNoteType());
+        note.setContent(dto.getContent());
+        note.setKeyWords(Arrays.asList(dto.getKeyWords().split(", ")));
+        note.setCreatedAt(dto.getCreatedAt());
+        note.setUser(dto.getUser());
+        return note;
     }
 }
