@@ -129,9 +129,9 @@ public class NoteController {
     }
 
     @GetMapping("/share")
-    public String share(@RequestParam("id") UUID id, Model model) {
+    public String share(@RequestParam("id") UUID id, Model model, Authentication authentication) {
         Note note = noteService.getById(id);
-        if (note == null || note.getNoteType() == NoteType.PRIVATE) {
+        if (note.getNoteType() == NoteType.PRIVATE && !authentication.getName().equals(note.getUser().getUsername())) {
             return "redirect:/notes/notfound";
         }
         model.addAttribute("note", note);

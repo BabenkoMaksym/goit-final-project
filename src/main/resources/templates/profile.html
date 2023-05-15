@@ -37,10 +37,12 @@
         }
 
         button[type="button"] {
-            background-color: #ffffff;
+            width: 100%;
+            background-color: #007bff;
+            color: #ffffff;
+            padding: 10px;
             border: none;
-            color: #007bff;
-            text-decoration: underline;
+            border-radius: 5px;
             cursor: pointer;
         }
     </style>
@@ -50,7 +52,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <h1 class="text-center mb-4">User Profile</h1>
-            <form th:action="@{/profile/changeEmail}" method="get">
+            <form th:action="@{/logout}" method="post">
                 <div class="mb-3">
                     <label for="username" class="form-label">Username</label>
                     <input type="text" class="form-control" id="username" placeholder="Username" th:value="${user.username}" readonly>
@@ -65,14 +67,18 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <button type="submit" class="btn btn-primary">Change Email</button>
+                        <a th:href="@{/profile/changeEmail(username=${user.username})}">
+                            <button type="button" class="btn btn-primary">Change Password</button>
+                        </a>
                     </div>
                     <div class="col-md-6">
-                        <button type="submit" class="btn btn-primary">Change Password</button>
+                        <a th:href="@{/profile/changePassword(username=${user.username})}">
+                            <button type="button" class="btn btn-primary">Change Password</button>
+                        </a>
                     </div>
                 </div>
                 <div class="mt-3">
-                    <form th:action="@{/logout}" method="post">
+                    <form >
                         <button type="submit" class="btn btn-danger">Logout</button>
                     </form>
                 </div>
