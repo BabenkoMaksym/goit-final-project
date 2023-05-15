@@ -80,8 +80,8 @@ public class NoteController {
     @GetMapping("/")
     public String feedNotes(@RequestParam(name = "page", required = false) Integer page, Model model) {
         page = page == null ? 0 : page >= 1 ? page - 1 : page;
-        List<Note> notes = noteService.listPublicNotes(page);
-        model.addAttribute("notes", notes);
+        List<NoteDTO> noteDTOs = noteService.listPublicNoteDTOs(page);
+        model.addAttribute("notes", noteDTOs);
         return "feed";
     }
 

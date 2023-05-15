@@ -61,6 +61,15 @@ public class NoteService {
         return noteRepository.findPublicNotes(PageRequest.of(page, 10));
     }
 
+    public List<NoteDTO> listPublicNoteDTOs(Integer page){
+        List<Note> notes = listPublicNotes(page);
+        List<NoteDTO> noteDTOs = new ArrayList<>();
+        for (Note note: notes) {
+            noteDTOs.add(getNoteDTOFromNote(note));
+        }
+        return noteDTOs;
+    }
+
     public List<Note> listOfNotesByUser(User user) {
         return noteRepository.findByUser(user);
     }
