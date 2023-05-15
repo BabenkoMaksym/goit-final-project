@@ -6,15 +6,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-//import ua.goit.finalProj2.notes.form_common.NoteCreateException;
 import ua.goit.finalProj2.notes.form_common.NoteCreateException;
 import ua.goit.finalProj2.users.User;
-//import static ua.goit.finalProj2.notes.form_common.NoteValidate.validateNoteCreating;
 
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static ua.goit.finalProj2.notes.form_common.NoteValidate.validateNoteCreating;
 
@@ -63,5 +63,16 @@ public class NoteService {
 
     public List<Note> listOfNotesByUser(User user) {
         return noteRepository.findByUser(user);
+    }
+
+    public void copyNoteLinkToClipboard(Note note) {
+        StringSelection stringSelection = new StringSelection(getNoteLink(note));
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(stringSelection, null);
+    }
+
+    public String getNoteLink(Note note) {
+        String baseUrl = "http://localhost:9999/notes/share/";
+        return baseUrl + note.getId();
     }
 }

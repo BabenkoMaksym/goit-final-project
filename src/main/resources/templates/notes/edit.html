@@ -1,36 +1,36 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Note</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
 </head>
 <body>
-<div class="container mt-4">
+<div class="container mt-5">
     <h1>Edit Note</h1>
     <span th:text="${error}"></span>
 
     <form method="post" th:object="${note}" th:action="@{/notes/edit}">
         <input type="hidden" id="id" name="id" th:value="${note.id}">
-        <div class="form-group">
-            <label for="name">Title:</label>
+        <div class="mb-3">
+            <label for="name" class="form-label">Name:</label>
             <input type="text" id="name" name="name" class="form-control" th:value="${note.name}">
         </div>
-        <div class="form-group">
-            <label for="content">Content:</label>
+        <div class="mb-3">
+            <label for="content" class="form-label">Content:</label>
             <textarea id="content" name="content" class="form-control" th:text="${note.content}"></textarea>
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             <label for="noteType" class="form-label">Access Type:</label>
-            <select id="noteType" name="noteType" th:field="*{noteType}">
+            <select id="noteType" name="noteType" class="form-select" th:field="*{noteType}">
                 <option value="PUBLIC">PUBLIC</option>
                 <option value="PRIVATE">PRIVATE</option>
-            </select><br/>
+            </select>
         </div>
         <button type="submit" class="btn btn-primary">Save</button>
     </form>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

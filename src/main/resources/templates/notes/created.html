@@ -1,30 +1,50 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Note Created</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
 </head>
+
 <body>
-<h1>Note Created</h1>
-
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Content</th>
-    <th>Access Type</th>
-    <th>Created At</th>
-  </tr>
-  <tr>
-
-    <td th:text="${note.content.length() > 200 ? note.content.substring(0, 200) + '...' : note.content}"></td>
-    <td th:text="${note.noteType}"></td>
-    <td th:text="${note.createdAt}"></td>
-  </tr>
-</table>
-<div>
-  <a href="/notes/my">
-    <button type="button">Ok</button>
-  </a>
+<div class="container my-5">
+  <div class="row">
+    <div class="col-md-12">
+      <h1>Note Created</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <table class="table table-striped table-hover mt-3">
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Content</th>
+          <th>Access Type</th>
+          <th>Created At</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td th:text="${note.name}"></td>
+          <td th:text="${note.content.length() > 200 ? note.content.substring(0, 200) + '...' : note.content}"></td>
+          <td th:text="${note.noteType}"></td>
+          <td th:text="${note.createdAt}"></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 text-center">
+      <a class="btn btn-primary" href="/notes/my">Ok</a>
+    </div>
+  </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

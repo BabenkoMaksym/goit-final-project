@@ -79,7 +79,7 @@ public class NoteController {
         page = page == null ? 0 : page >= 1 ? page - 1 : page;
         List<Note> notes = noteService.listPublicNotes(page);
         model.addAttribute("notes", notes);
-        return "feed";
+        return "notes/feed";
     }
 
     @GetMapping("/read")
@@ -125,7 +125,22 @@ public class NoteController {
 
     @GetMapping("/notfound")
     public String noteNotFound() {
-        return "noteNotFound";
+        return "notes/noteNotFound";
     }
 
+    @GetMapping("/share")
+    public String share(@RequestParam("id") UUID id, Model model) {
+        Note note = noteService.getById(id);
+        if (note == null || note.getNoteType() == NoteType.PRIVATE) {
+            return "redirect:/notes/notfound";
+        }
+        model.addAttribute("note", note);
+        return "notes/share";
+    }
+
+    @PostMapping("/share")
+    public void saveNoteToClipboard(@RequestParam UUID id) {
+        Note note = noteService.getById(id);
+        noteService.copyNoteLinkToClipboard(note);
+    }
 }
