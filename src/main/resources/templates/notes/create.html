@@ -16,17 +16,22 @@
             <span class="text-danger" th:text="${error}"></span>
         </div>
     </div>
-    <form th:action="@{/notes/create}" method="post" th:object="${note}">
+    <form th:action="@{/notes/create}" method="post" th:object="${notedto}">
         <div class="mb-3">
             <label for="name" class="form-label">Name:</label>
             <input type="text" class="form-control" id="name" name="name" placeholder="Name (5 to 100 characters)"
                    th:field="*{name}"/>
         </div>
         <div class="mb-3">
+            <label for="keyWords" class="form-label">keyWords</label>
+            <input type="text" class="form-control" placeholder="Ключові слова нотатки, перелічені через кому. Рядок, від 5 до 50 символів включно"
+                   id="keyWords" name="keyWords" th:field="*{keyWords}"/><br/>
+        </div>
+        <div class="mb-3">
             <label for="content" class="form-label">Content:</label>
             <textarea class="form-control" id="content" name="content"
                       placeholder="Content (5 to 10,000 characters)"
-                      rows="10" th:field="*{content}"></textarea>
+                      rows="20" th:field="*{content}"></textarea>
         </div>
         <div class="mb-3">
             <label for="noteType" class="form-label">Access Type:</label>

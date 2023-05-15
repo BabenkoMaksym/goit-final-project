@@ -16,6 +16,7 @@ public class NoteValidate {
     public static void validateNoteCreating(Note note) throws NoteCreateException {
         checkNoteName(note);
         checkNoteContent(note);
+        checkNoteKeyWords(note);
     }
 
     private static void checkNoteName(Note note) throws NoteCreateException {
@@ -32,5 +33,8 @@ public class NoteValidate {
                     + CONTENT_MIN_LENGTH + ", та не довше ніж "
                     + CONTENT_MAX_LENGTH + " симовлів");
         }
+    }
+    private static void checkNoteKeyWords(Note note) throws NoteCreateException{
+        //todo
     }
 }

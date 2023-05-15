@@ -39,17 +39,19 @@ public class NoteController {
         if (id != null) {
             note = noteService.getById(id);
         }
-        model.addAttribute("note", note);
+        NoteDTO noteDTO = noteService.getNoteDTOFromNote(note);
+        model.addAttribute("note", noteDTO);
         return "notes/edit";
     }
 
     @PostMapping("/edit")
-    public String saveOrUpdateNote(@ModelAttribute("note") Note note, Model model, Authentication authentication) {
+    public String saveOrUpdateNote(@ModelAttribute("note") NoteDTO noteDTO, Model model, Authentication authentication) {
         String name = authentication.getName();
-        note.setCreatedAt(LocalDateTime.now());
-        note.setUser(userRepository.findUserByUsername(name).get());
+        noteDTO.setCreatedAt(LocalDateTime.now());
+        noteDTO.setUser(userRepository.findUserByUsername(name).get());
+        Note note = noteService.getNoteFromDTO(noteDTO);
         try {
-            if (note.getId() == null) {
+            if (noteDTO.getId() == null) {
                 noteService.add(note);
             } else {
                 noteService.update(note);
@@ -58,7 +60,8 @@ public class NoteController {
             model.addAttribute("error", e.getMessage());
             return "notes/edit";
         }
-        model.addAttribute("note", note);
+
+        model.addAttribute("note", noteDTO);
         return "notes/created";
     }
 
@@ -77,48 +80,52 @@ public class NoteController {
     @GetMapping("/")
     public String feedNotes(@RequestParam(name = "page", required = false) Integer page, Model model) {
         page = page == null ? 0 : page >= 1 ? page - 1 : page;
-        List<Note> notes = noteService.listPublicNotes(page);
-        model.addAttribute("notes", notes);
-        return "notes/feed";
+        List<NoteDTO> noteDTOs = noteService.listPublicNoteDTOs(page);
+        model.addAttribute("notes", noteDTOs);
+        return "feed";
     }
 
     @GetMapping("/read")
     public String readNote(@RequestParam("id") UUID id, Model model, Authentication authentication) {
-        Note note = noteService.getById(id);
-        if (note.getNoteType() == NoteType.PRIVATE && !authentication.getName().equals(note.getUser().getUsername())) {
+        NoteDTO noteDTO = noteService.getNoteDTOFromNote(noteService.getById(id));
+        if (noteDTO.getNoteType() == NoteType.PRIVATE && !authentication.getName().equals(noteDTO.getUser().getUsername())) {
             return "redirect:/notes/notfound";
         }
-        model.addAttribute("note", note);
+
+        model.addAttribute("note", noteDTO);
         return "notes/read";
 
     }
 
     @GetMapping("/create")
     public String showCreateNoteForm(Model model) {
-        model.addAttribute("note", new Note());
+        model.addAttribute("note", new NoteDTO());
         return "notes/create";
     }
 
     @PostMapping("/create")
-    public String createNote(@ModelAttribute("note") Note note, Model model, Authentication authentication) {
+    public String createNote(@ModelAttribute("note") NoteDTO noteDTO, Model model, Authentication authentication) {
+
         String name = authentication.getName();
-        note.setId(UUID.randomUUID());
-        note.setUser(userRepository.findUserByUsername(name).get());
-        note.setCreatedAt(LocalDateTime.now());
+        noteDTO.setId(UUID.randomUUID());
+        noteDTO.setUser(userRepository.findUserByUsername(name).get());
+        noteDTO.setCreatedAt(LocalDateTime.now());
+        Note note = noteService.getNoteFromDTO(noteDTO);
+        System.out.println("note = " + note);
         try {
             noteService.add(note);
         } catch (NoteCreateException e) {
             model.addAttribute("error", e.getMessage());
             return "/notes/create";
         }
-        model.addAttribute("note", note);
+        model.addAttribute("note", noteDTO);
         return "notes/created";
     }
 
     @GetMapping("/my")
     public String showAllUserNotes(Model model, Authentication authentication) throws AuthenticationException {
         User user = userService.authorizeUser(authentication.isAuthenticated());
-        List<Note> notes = noteService.listOfNotesByUser(user);
+        List<NoteDTO> notes = noteService.listOfNoteDTOsByUser(user);
         model.addAttribute("notes", notes);
         return "notes/my";
     }

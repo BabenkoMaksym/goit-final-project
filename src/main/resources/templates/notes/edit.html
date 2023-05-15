@@ -18,6 +18,10 @@
             <input type="text" id="name" name="name" class="form-control" th:value="${note.name}">
         </div>
         <div class="mb-3">
+            <label for="keyWords">KeyWords</label>
+            <input type="text" id="keyWords" name="keyWords" class="form-control" th:value="${note.keyWords}">
+        </div>
+        <div class="mb-3">
             <label for="content" class="form-label">Content:</label>
             <textarea id="content" name="content" class="form-control" th:text="${note.content}"></textarea>
         </div>
