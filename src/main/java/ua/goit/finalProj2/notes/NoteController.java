@@ -34,11 +34,18 @@ public class NoteController {
     }
 
     @GetMapping("/edit")
-    public String showNoteForm(@RequestParam(name = "id", required = false) UUID id, Model model) {
+    public String showNoteForm(@RequestParam(name = "id", required = false) UUID id, Model model, Authentication authentication) {
         Note note = new Note();
         if (id != null) {
             note = noteService.getById(id);
         }
+        if(note == null){
+            return "redirect:/notes/notfound";
+        }
+        if (!authentication.getName().equals(note.getUser().getUsername())) {
+            return "redirect:/notes/forbidden";
+        }
+
         NoteDTO noteDTO = noteService.getNoteDTOFromNote(note);
         model.addAttribute("note", noteDTO);
         return "notes/edit";
@@ -66,9 +73,16 @@ public class NoteController {
     }
 
     @PostMapping("/delete")
-    public String deleteNote(@RequestParam("id") UUID id, Model model) {
+    public String deleteNote(@RequestParam("id") UUID id, Model model, Authentication authentication) {
         if (id != null) {
             try {
+                Note note = noteService.getById(id);
+                if(note == null){
+                    return "redirect:/notes/notfound";
+                }
+                if (!authentication.getName().equals(note.getUser().getUsername())) {
+                    return "redirect:/notes/forbidden";
+                }
                 noteService.deleteById(id);
             } catch (IllegalArgumentException e) {
                 model.addAttribute("deleteMsg", e.getMessage());
@@ -89,7 +103,7 @@ public class NoteController {
     public String readNote(@RequestParam("id") UUID id, Model model, Authentication authentication) {
         NoteDTO noteDTO = noteService.getNoteDTOFromNote(noteService.getById(id));
         if (noteDTO.getNoteType() == NoteType.PRIVATE && !authentication.getName().equals(noteDTO.getUser().getUsername())) {
-            return "redirect:/notes/notfound";
+            return "redirect:/notes/forbidden";
         }
 
         model.addAttribute("note", noteDTO);
@@ -133,6 +147,11 @@ public class NoteController {
     @GetMapping("/notfound")
     public String noteNotFound() {
         return "notes/noteNotFound";
+    }
+
+    @GetMapping("/forbidden")
+    public String forbidden() {
+        return "noteForbidden";
     }
 
     @GetMapping("/share")
