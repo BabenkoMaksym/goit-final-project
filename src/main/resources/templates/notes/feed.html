@@ -107,6 +107,15 @@
         url.search = searchParams.toString();
         window.location.href = url.toString();
     }
+     function nextPage() {
+        const url = new URL(window.location.href);
+        const searchParams = url.searchParams;
+        let page = parseInt(searchParams.get('page')) || 1;
+        page++;
+        searchParams.set('page', page);
+        url.search = searchParams.toString();
+        window.location.href = url.toString();
+    }
 </script>
 </body>
 </html>
