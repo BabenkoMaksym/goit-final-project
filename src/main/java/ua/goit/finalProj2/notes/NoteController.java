@@ -34,10 +34,16 @@ public class NoteController {
     }
 
     @GetMapping("/edit")
-    public String showNoteForm(@RequestParam(name = "id", required = false) UUID id, Model model) {
+    public String showNoteForm(@RequestParam(name = "id", required = false) UUID id, Model model, Authentication authentication) {
         Note note = new Note();
         if (id != null) {
             note = noteService.getById(id);
+        }
+        if(note == null){
+            return "redirect:/notes/notfound";
+        }
+        if (!authentication.getName().equals(note.getUser().getUsername())) {
+            return "redirect:/notes/forbidden";
         }
         model.addAttribute("note", note);
         return "notes/edit";
@@ -63,9 +69,16 @@ public class NoteController {
     }
 
     @PostMapping("/delete")
-    public String deleteNote(@RequestParam("id") UUID id, Model model) {
+    public String deleteNote(@RequestParam("id") UUID id, Model model, Authentication authentication) {
         if (id != null) {
             try {
+                Note note = noteService.getById(id);
+                if(note == null){
+                    return "redirect:/notes/notfound";
+                }
+                if (!authentication.getName().equals(note.getUser().getUsername())) {
+                    return "redirect:/notes/forbidden";
+                }
                 noteService.deleteById(id);
             } catch (IllegalArgumentException e) {
                 model.addAttribute("deleteMsg", e.getMessage());
@@ -84,9 +97,15 @@ public class NoteController {
 
     @GetMapping("/read")
     public String readNote(@RequestParam("id") UUID id, Model model, Authentication authentication) {
-        Note note = noteService.getById(id);
-        if (note.getNoteType() == NoteType.PRIVATE && !authentication.getName().equals(note.getUser().getUsername())) {
+        Note note = null;
+        if (id != null) {
+            note = noteService.getById(id);
+        }
+        if(note == null){
             return "redirect:/notes/notfound";
+        }
+        if (!authentication.getName().equals(note.getUser().getUsername())) {
+            return "redirect:/notes/forbidden";
         }
         model.addAttribute("note", note);
         return "notes/read";
@@ -126,6 +145,11 @@ public class NoteController {
     @GetMapping("/notfound")
     public String noteNotFound() {
         return "noteNotFound";
+    }
+
+    @GetMapping("/forbidden")
+    public String forbidden() {
+        return "noteForbidden";
     }
 
 }
