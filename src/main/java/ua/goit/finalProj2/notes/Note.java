@@ -2,11 +2,13 @@ package ua.goit.finalProj2.notes;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.annotations.Type;
+import ua.goit.finalProj2.comments.Comment;
 import ua.goit.finalProj2.users.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -15,8 +17,21 @@ import java.util.UUID;
 @Table(name = "notes", schema = "final_project")
 public class Note {
 
+    public void addComment(Comment comment) {
+        comment.setNote(this);
+        comments.add(comment);
+    }
+
+    public void removeComment(Comment comment) {
+        comment.setNote(null);
+        comments.remove(comment);
+    }
+
     @Id
     UUID id;
+
+    @OneToMany(mappedBy = "note", cascade = CascadeType.ALL)
+    List<Comment> comments = new ArrayList<>();
 
     @Column(name = "name")
     String name;
@@ -35,5 +50,4 @@ public class Note {
 
     @Column(name = "created_at")
     LocalDateTime createdAt;
-
 }

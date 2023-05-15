@@ -3,6 +3,7 @@ package ua.goit.finalProj2.comments;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+import ua.goit.finalProj2.notes.Note;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -17,8 +18,9 @@ public class Comment {
     @Id
     UUID id;
 
-    @Column(name = "note_id")
-    UUID noteID;
+    @ManyToOne
+    @JoinColumn(name = "note_id")
+    Note note;
 
     @Column(name = "user_id")
     int userID;
