@@ -12,4 +12,6 @@ import java.util.UUID;
 public interface CommentRepository extends JpaRepository<Comment, UUID> {
     @Query("SELECT c FROM Comment c WHERE c.note.id = :noteId")
     List<Comment> findByNoteID(@Param("noteId") UUID noteId);
+
+    void deleteById(UUID id);
 }

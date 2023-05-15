@@ -13,14 +13,10 @@ import ua.goit.finalProj2.users.User;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 
-
-import static org.thymeleaf.util.StringUtils.join;
 import static ua.goit.finalProj2.notes.form_common.NoteValidate.validateNoteCreating;
 
 @Service
@@ -97,6 +93,7 @@ public class NoteService {
         note.setKeyWords(transformToKeyWords(dto.getKeyWords(), note));
         note.setCreatedAt(dto.getCreatedAt());
         note.setUser(dto.getUser());
+        note.setComments(dto.getComments());
         return note;
     }
 
@@ -109,6 +106,7 @@ public class NoteService {
         dto.setCreatedAt(note.getCreatedAt());
         dto.setNoteType(note.getNoteType());
         dto.setKeyWords(transformFromKeyWords(note.getKeyWords()));
+        dto.setComments(note.getComments());
         return dto;
     }
     private List<KeyWords> transformToKeyWords(String line, Note note){
@@ -141,4 +139,5 @@ public class NoteService {
         String baseUrl = "http://localhost:9999/notes/share/";
         return baseUrl + note.getId();
     }
+
 }

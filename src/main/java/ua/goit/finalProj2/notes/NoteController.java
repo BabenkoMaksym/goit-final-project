@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ua.goit.finalProj2.comments.Comment;
 import ua.goit.finalProj2.notes.form_common.NoteCreateException;
 import ua.goit.finalProj2.users.User;
 import ua.goit.finalProj2.users.UserRepository;
@@ -107,6 +108,7 @@ public class NoteController {
             model.addAttribute("isAdmin", "admin");
         }
         model.addAttribute("notes", noteDTOs);
+        model.addAttribute("comment", new Comment());
         return "notes/feed";
     }
 
@@ -179,5 +181,30 @@ public class NoteController {
     public void saveNoteToClipboard(@RequestParam UUID id) {
         Note note = noteService.getById(id);
         noteService.copyNoteLinkToClipboard(note);
+    }
+    @PostMapping("/comments")
+    public String commentNote(@RequestParam UUID noteId,
+                              @ModelAttribute("comment") Comment comment, Model model, Authentication authentication) {
+        Note note = noteService.getById(noteId);
+
+        comment.setNote(note);
+        comment.setUser(userRepository.findUserByUsername(authentication.getName()).get());
+        comment.setId(UUID.randomUUID());
+        comment.setCreatedAt(LocalDateTime.now());
+
+        note.addComment(comment);
+        try {
+            noteService.update(note);
+        } catch (NoteCreateException e) {
+            model.addAttribute("error", e.getMessage());
+
+        }
+        return "redirect:/notes/";
+    }
+
+    @PostMapping("/comments/delete")
+    public String deleteComment(@RequestParam UUID id, Model model, Authentication authentication) {
+
+        return "redirect:/notes/";
     }
 }

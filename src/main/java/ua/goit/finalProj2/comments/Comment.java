@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import ua.goit.finalProj2.notes.Note;
+import ua.goit.finalProj2.users.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -22,13 +23,15 @@ public class Comment {
     @JoinColumn(name = "note_id")
     Note note;
 
-    @Column(name = "user_id")
-    int userID;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    User user;
 
     @Column(name = "comment_text")
     String content;
 
     @Column(name = "created_at")
     LocalDateTime createdAt;
+
 
 }

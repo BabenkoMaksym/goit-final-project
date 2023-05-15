@@ -19,16 +19,6 @@ import java.util.UUID;
 @Table(name = "notes", schema = "final_project")
 public class Note {
 
-    public void addComment(Comment comment) {
-        comment.setNote(this);
-        comments.add(comment);
-    }
-
-    public void removeComment(Comment comment) {
-        comment.setNote(null);
-        comments.remove(comment);
-    }
-
     @Id
     UUID id;
 
@@ -57,4 +47,8 @@ public class Note {
 
     @Column(name = "created_at")
     LocalDateTime createdAt;
+
+    public void addComment(Comment comment) {
+        comments.add(comment);
+    }
 }
