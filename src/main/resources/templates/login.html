@@ -59,6 +59,9 @@
         <div class="col-md-4">
             <h1 class="text-center mb-4">Authorization</h1>
             <form th:action="@{/login}" th:object="${userDto}" method="post">
+                <div th:if="${error}" class="alert alert-danger" role="alert">
+                    ${error}
+                </div>
                 <div class="mb-3">
                     <label for="username" class="form-label">Login</label>
                     <input type="text" class="form-control" id="username" placeholder="login" th:field="*{username}">

@@ -94,7 +94,7 @@ public class NoteService {
         note.setName(dto.getName());
         note.setNoteType(dto.getNoteType());
         note.setContent(dto.getContent());
-        note.setKeyWords(transformToKeyWords(dto.getKeyWords()));
+        note.setKeyWords(transformToKeyWords(dto.getKeyWords(), note));
         note.setCreatedAt(dto.getCreatedAt());
         note.setUser(dto.getUser());
         return note;
@@ -111,13 +111,14 @@ public class NoteService {
         dto.setKeyWords(transformFromKeyWords(note.getKeyWords()));
         return dto;
     }
-    private List<KeyWords> transformToKeyWords(String line){
+    private List<KeyWords> transformToKeyWords(String line, Note note){
        List<KeyWords> list = new ArrayList<KeyWords>();
        String[] words = line.split(", ");
         for (String word : words) {
             KeyWords keyWords = new KeyWords();
             if(word.isBlank())continue;
             keyWords.setWord(word);
+            keyWords.setNote(note);
             list.add(keyWords);
         }
         return list;

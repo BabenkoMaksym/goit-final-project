@@ -13,7 +13,6 @@ import java.util.UUID;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Table(name = "notes", schema = "final_project")
 public class NoteDTO {
 
 

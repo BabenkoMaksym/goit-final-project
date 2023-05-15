@@ -96,7 +96,7 @@ public class NoteController {
         page = page == null ? 0 : page >= 1 ? page - 1 : page;
         List<NoteDTO> noteDTOs = noteService.listPublicNoteDTOs(page);
         model.addAttribute("notes", noteDTOs);
-        return "feed";
+        return "notes/feed";
     }
 
     @GetMapping("/read")

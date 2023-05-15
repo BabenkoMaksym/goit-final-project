@@ -28,7 +28,7 @@ public class Note {
     String content;
 
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER ,cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "note_id")
     List<KeyWords> keyWords = new ArrayList<>();
 
