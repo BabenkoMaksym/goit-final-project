@@ -6,16 +6,21 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-//import ua.goit.finalProj2.notes.form_common.NoteCreateException;
 import ua.goit.finalProj2.notes.form_common.NoteCreateException;
+import ua.goit.finalProj2.notes.keyWords.KeyWords;
 import ua.goit.finalProj2.users.User;
-//import static ua.goit.finalProj2.notes.form_common.NoteValidate.validateNoteCreating;
 
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
+
+
+import static org.thymeleaf.util.StringUtils.join;
 import static ua.goit.finalProj2.notes.form_common.NoteValidate.validateNoteCreating;
 
 @Service
@@ -61,7 +66,79 @@ public class NoteService {
         return noteRepository.findPublicNotes(PageRequest.of(page, 10));
     }
 
+    public List<NoteDTO> listPublicNoteDTOs(Integer page){
+        List<Note> notes = listPublicNotes(page);
+        List<NoteDTO> noteDTOs = new ArrayList<>();
+        for (Note note: notes) {
+            noteDTOs.add(getNoteDTOFromNote(note));
+        }
+        return noteDTOs;
+    }
+
     public List<Note> listOfNotesByUser(User user) {
         return noteRepository.findByUser(user);
+    }
+    public List<NoteDTO> listOfNoteDTOsByUser(User user) {
+      List<Note> notes =   noteRepository.findByUser(user);
+      List<NoteDTO> noteDTOs= new ArrayList<>();
+      for (Note note : notes){
+          noteDTOs.add(getNoteDTOFromNote(note));
+      }
+      return noteDTOs;
+    }
+
+
+    public Note getNoteFromDTO(NoteDTO dto) {
+        Note note = new Note();
+        note.setId(dto.getId());
+        note.setName(dto.getName());
+        note.setNoteType(dto.getNoteType());
+        note.setContent(dto.getContent());
+        note.setKeyWords(transformToKeyWords(dto.getKeyWords(), note));
+        note.setCreatedAt(dto.getCreatedAt());
+        note.setUser(dto.getUser());
+        return note;
+    }
+
+    public NoteDTO getNoteDTOFromNote(Note note){
+        NoteDTO dto = new NoteDTO();
+        dto.setId(note.getId());
+        dto.setUser(note.getUser());
+        dto.setName(note.getName());
+        dto.setContent(note.getContent());
+        dto.setCreatedAt(note.getCreatedAt());
+        dto.setNoteType(note.getNoteType());
+        dto.setKeyWords(transformFromKeyWords(note.getKeyWords()));
+        return dto;
+    }
+    private List<KeyWords> transformToKeyWords(String line, Note note){
+       List<KeyWords> list = new ArrayList<KeyWords>();
+       String[] words = line.split(", ");
+        for (String word : words) {
+            KeyWords keyWords = new KeyWords();
+            if(word.isBlank())continue;
+            keyWords.setWord(word);
+            keyWords.setNote(note);
+            list.add(keyWords);
+        }
+        return list;
+    }
+    private String transformFromKeyWords(List<KeyWords> words){
+        StringBuilder line = new StringBuilder();
+        for (KeyWords word: words){
+            line.append(word.getWord()).append(", ");
+        }
+        return line.toString();
+    }
+
+    public void copyNoteLinkToClipboard(Note note) {
+        StringSelection stringSelection = new StringSelection(getNoteLink(note));
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(stringSelection, null);
+    }
+
+    public String getNoteLink(Note note) {
+        String baseUrl = "http://localhost:9999/notes/share/";
+        return baseUrl + note.getId();
     }
 }

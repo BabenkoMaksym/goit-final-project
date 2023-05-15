@@ -3,6 +3,8 @@ package ua.goit.finalProj2.notes;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import ua.goit.finalProj2.comments.Comment;
+
+import ua.goit.finalProj2.notes.keyWords.KeyWords;
 import ua.goit.finalProj2.users.User;
 
 import javax.persistence.*;
@@ -38,6 +40,11 @@ public class Note {
 
     @Column(name = "content")
     String content;
+
+
+    @OneToMany(fetch = FetchType.EAGER ,cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "note_id")
+    List<KeyWords> keyWords = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     @Column(name = "access_type")
