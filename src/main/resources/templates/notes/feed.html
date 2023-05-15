@@ -64,6 +64,10 @@
             <h1>List of Thots</h1>
         </div>
         <div class="col-md-6 text-end">
+            <div th:if="${error}" class="alert alert-danger" role="alert">
+                <span th:text = ${error}></span>
+            </div>
+            <a th:if="${isAdmin}" class="btn btn-primary" href="/admin/users">Admin Panel</a>
             <a class="btn btn-primary" href="/notes/my">My Notes</a>
             <a class="btn btn-primary" href="/profile/">My Profile</a>
         </div>

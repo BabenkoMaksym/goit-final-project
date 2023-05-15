@@ -17,6 +17,9 @@
         </div>
     </div>
     <form th:action="@{/notes/create}" method="post" th:object="${note}">
+        <div th:if="${error}" class="alert alert-danger" role="alert">
+            <span th:text = ${error}></span>
+        </div>
         <div class="mb-3">
             <label for="name" class="form-label">Name:</label>
             <input type="text" class="form-control" id="name" name="name" placeholder="Name (5 to 100 characters)" th:field="*{name}"/>

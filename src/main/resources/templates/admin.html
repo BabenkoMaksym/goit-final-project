@@ -5,8 +5,10 @@
     <title>Admin Page</title>
 </head>
 <body>
-<span th:text="${error}"></span>
 <h1>Admin Page</h1>
+<div th:if="${error}" class="alert alert-danger" role="alert">
+    <span th:text = ${error}></span>
+</div>
 <table>
     <thead>
     <tr>

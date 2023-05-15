@@ -25,20 +25,24 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
 
-
-    public void createUser(UserDto userDto) throws AuthenticationException{
+    public void createUser(UserDto userDto) throws AuthenticationException {
         User user = repository.findUserByUsername(userDto.getUsername()).orElse(null);
         if (user != null) {
             throw new AuthenticationException("Користувач з таким логіном вже існує.");
         } else {
-            user = new User();
-            validateUserRegister(userDto);
-            user.setUsername(userDto.getUsername());
-            user.setEmail(userDto.getEmail());
-            user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-            user.setRole(UserRole.USER);
-            user.setEnabled(true);
-            repository.create(user);
+            user = repository.findFirstByEmail(userDto.getEmail()).orElse(null);
+            if (user != null) {
+                throw new AuthenticationException("Користувач з таким email вже існує");
+            } else {
+                user = new User();
+                validateUserRegister(userDto);
+                user.setUsername(userDto.getUsername());
+                user.setEmail(userDto.getEmail());
+                user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+                user.setRole(UserRole.USER);
+                user.setEnabled(true);
+                repository.create(user);
+            }
         }
     }
 
@@ -61,8 +65,8 @@ public class UserService {
 
     public void changeEmail(UserDto userDto) throws AuthenticationException {
         User user;
-            user = repository.findUserByUsername(userDto.getUsername())
-                    .orElseThrow(() -> new AuthenticationException("Invalid username"));
+        user = repository.findUserByUsername(userDto.getUsername())
+                .orElseThrow(() -> new AuthenticationException("Invalid username"));
         user.setEmail(userDto.getEmail());
         repository.save(user);
     }

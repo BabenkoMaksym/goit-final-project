@@ -57,8 +57,10 @@
     <div class="row justify-content-center">
         <div class="col-md-4">
             <h1 class="text-center mb-4">Change Email</h1>
-            <span th:text="${error}"></span>
             <form th:action="@{/profile/changeEmail}" method="post">
+                <div th:if="${error}" class="alert alert-danger" role="alert">
+                    <span th:text = ${error}></span>
+                </div>
                 <input type="hidden" name="username" th:value="${username}"/>
                 <div class="mb-3">
                     <label for="newEmail" class="form-label">New Email:</label>

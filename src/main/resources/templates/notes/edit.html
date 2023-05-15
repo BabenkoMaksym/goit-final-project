@@ -9,9 +9,10 @@
 <body>
 <div class="container mt-5">
     <h1>Edit Note</h1>
-    <span th:text="${error}"></span>
-
     <form method="post" th:object="${note}" th:action="@{/notes/edit}">
+        <div th:if="${error}" class="alert alert-danger" role="alert">
+            <span th:text = ${error}></span>
+        </div>
         <input type="hidden" id="id" name="id" th:value="${note.id}">
         <div class="mb-3">
             <label for="name" class="form-label">Name:</label>

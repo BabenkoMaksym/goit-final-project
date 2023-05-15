@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import ua.goit.finalProj2.notes.form_common.NoteCreateException;
 import ua.goit.finalProj2.users.User;
 import ua.goit.finalProj2.users.UserRepository;
+import ua.goit.finalProj2.users.UserRole;
 import ua.goit.finalProj2.users.UserService;
 import ua.goit.finalProj2.users.form_common.AuthenticationException;
 
@@ -57,15 +58,20 @@ public class NoteController {
         noteDTO.setCreatedAt(LocalDateTime.now());
         noteDTO.setUser(userRepository.findUserByUsername(name).get());
         Note note = noteService.getNoteFromDTO(noteDTO);
-        try {
-            if (noteDTO.getId() == null) {
-                noteService.add(note);
-            } else {
-                noteService.update(note);
+        if (name.equals(note.getUser().getUsername())) {
+            try {
+                if (noteDTO.getId() == null) {
+                    noteService.add(note);
+                } else {
+                    noteService.update(note);
+                }
+
+            } catch (NoteCreateException e) {
+                model.addAttribute("error", e.getMessage());
+                return "notes/edit";
             }
-        } catch (NoteCreateException e) {
-            model.addAttribute("error", e.getMessage());
-            return "notes/edit";
+        } else {
+            return "redirect:/notes/forbidden";
         }
 
         model.addAttribute("note", noteDTO);
@@ -92,9 +98,14 @@ public class NoteController {
     }
 
     @GetMapping("/")
-    public String feedNotes(@RequestParam(name = "page", required = false) Integer page, Model model) {
+    public String feedNotes(@RequestParam(name = "page", required = false) Integer page, Model model, Authentication authentication) {
+        String name = authentication.getName();
+        User user = userRepository.findUserByUsername(name).get();
         page = page == null ? 0 : page >= 1 ? page - 1 : page;
         List<NoteDTO> noteDTOs = noteService.listPublicNoteDTOs(page);
+        if (user.getRole() == UserRole.ADMIN) {
+            model.addAttribute("isAdmin", "admin");
+        }
         model.addAttribute("notes", noteDTOs);
         return "notes/feed";
     }
