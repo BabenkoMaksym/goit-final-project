@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ua.goit.finalProj2.users.form_common.UserDto;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -28,4 +29,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findUserByUsername(String username);
 
     Optional<User> findFirstByEmail(String email);
+
+    List<User> findAllByOrderByUsernameAsc();
 }
