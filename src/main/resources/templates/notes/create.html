@@ -13,7 +13,6 @@
     <div class="row">
         <div class="col-md-12">
             <h1>Create New Note</h1>
-            <span class="text-danger" th:text="${error}"></span>
         </div>
     </div>
     <form th:action="@{/notes/create}" method="post" th:object="${note}">
@@ -26,7 +25,7 @@
         </div>
         <div class="mb-3">
             <label for="keyWords" class="form-label">keyWords</label>
-            <input type="text" class="form-control" placeholder="Ключові слова нотатки, перелічені через кому. Рядок, від 5 до 50 символів включно"
+            <input type="text" class="form-control" placeholder="Key words of the note, listed separated by commas. String, 5 to 50 characters inclusive"
                    id="keyWords" name="keyWords" th:field="*{keyWords}"/><br/>
         </div>
         <div class="mb-3">

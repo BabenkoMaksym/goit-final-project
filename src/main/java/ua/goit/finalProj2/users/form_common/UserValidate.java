@@ -16,19 +16,19 @@ public class UserValidate {
 
     private static void checkUsernameValid(String username) throws AuthenticationException{
         if(!username.matches(USERNAME_REGEX))
-            throw new AuthenticationException("Не валідний логін." +
-                    " Допустиме ім'я користувача - будь-які символи латиниці та цифри." +
-                    " Довжина імені – від 5 до 50 символів включно.");
+            throw new AuthenticationException("Invalid login." +
+                    " Valid username - any Latin characters and numbers." +
+                    " The length of the name is from 5 to 50 characters inclusive.");
     }
 
     public static void checkEmailValid(String email) throws AuthenticationException{
         if(!email.matches(EMAIL_REGEX))
-            throw new AuthenticationException("Не валідний Email.");
+            throw new AuthenticationException("Invalid email.");
     }
 
     public static void checkPasswordValid(String password) throws AuthenticationException{
         if(!password.matches(PASSWORD_REGEX))
-            throw new AuthenticationException("Не валідний пароль." +
-                    " Пароль користувача включає будь-які символи від 8 до 100 символів включно.");
+            throw new AuthenticationException("Password is not valid." +
+                    " The user password includes any characters between 8 and 100 characters inclusive.");
     }
 }

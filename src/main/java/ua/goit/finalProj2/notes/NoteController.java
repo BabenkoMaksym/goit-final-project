@@ -38,7 +38,11 @@ public class NoteController {
     public String showNoteForm(@RequestParam(name = "id", required = false) UUID id, Model model, Authentication authentication) {
         Note note = new Note();
         if (id != null) {
-            note = noteService.getById(id);
+            try {
+                note = noteService.getById(id);
+            } catch (IllegalArgumentException e) {
+                return "redirect:/notes/notfound";
+            }
         }
         if(note == null){
             return "redirect:/notes/notfound";
@@ -82,7 +86,12 @@ public class NoteController {
     public String deleteNote(@RequestParam("id") UUID id, Model model, Authentication authentication) {
         if (id != null) {
             try {
-                Note note = noteService.getById(id);
+                Note note;
+                try {
+                    note = noteService.getById(id);
+                } catch (IllegalArgumentException e) {
+                    return "redirect:/notes/notfound";
+                }
                 if(note == null){
                     return "redirect:/notes/notfound";
                 }
@@ -112,7 +121,16 @@ public class NoteController {
 
     @GetMapping("/read")
     public String readNote(@RequestParam("id") UUID id, Model model, Authentication authentication) {
-        NoteDTO noteDTO = noteService.getNoteDTOFromNote(noteService.getById(id));
+        Note note;
+        try {
+            note = noteService.getById(id);
+        } catch (IllegalArgumentException e) {
+            return "redirect:/notes/notfound";
+        }
+        if (note == null) {
+            return "redirect:/notFound";
+        }
+        NoteDTO noteDTO = noteService.getNoteDTOFromNote(note);
         if (noteDTO.getNoteType() == NoteType.PRIVATE && !authentication.getName().equals(noteDTO.getUser().getUsername())) {
             return "redirect:/notes/forbidden";
         }
@@ -167,9 +185,18 @@ public class NoteController {
 
     @GetMapping("/share")
     public String share(@RequestParam("id") UUID id, Model model, Authentication authentication) {
-        Note note = noteService.getById(id);
-        if (note.getNoteType() == NoteType.PRIVATE && !authentication.getName().equals(note.getUser().getUsername())) {
+        Note note;
+        try {
+            note = noteService.getById(id);
+        } catch (IllegalArgumentException e) {
             return "redirect:/notes/notfound";
+        }
+        if (note == null) {
+            return "redirect:/notFound";
+        }
+
+        if (note.getNoteType() == NoteType.PRIVATE && !authentication.getName().equals(note.getUser().getUsername())) {
+            return "redirect:/notes/forbidden";
         }
         model.addAttribute("note", note);
         return "notes/share";
