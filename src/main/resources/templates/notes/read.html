@@ -28,7 +28,7 @@
                     <p class="card-text" th:text="${note.content}"></p>
                 </div>
                 <div class="card-footer">
-                    <a class="btn btn-secondary" th:href="@{/notes/edit(id=*{id})}">Edit</a>
+                    <a class="btn btn-secondary" th:href="@{/notes/edit(id=${note.id})}">Edit</a>
                     <button type="button" class="btn btn-danger" data-bs-toggle="modal"
                             data-bs-target="#deleteModal">Delete</button>
                 </div>
