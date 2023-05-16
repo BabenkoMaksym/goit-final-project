@@ -41,14 +41,14 @@ public class NoteController {
             try {
                 note = noteService.getById(id);
             } catch (IllegalArgumentException e) {
-                return "redirect:notes/notfound";
+                return "redirect:notfound";
             }
         }
         if(note == null){
-            return "redirect:notes/notfound";
+            return "redirect:notfound";
         }
         if (!authentication.getName().equals(note.getUser().getUsername())) {
-            return "redirect:notes/forbidden";
+            return "redirect:forbidden";
         }
 
         NoteDTO noteDTO = noteService.getNoteDTOFromNote(note);
@@ -75,7 +75,7 @@ public class NoteController {
                 return "notes/edit";
             }
         } else {
-            return "redirect:notes/forbidden";
+            return "redirect:forbidden";
         }
 
         model.addAttribute("note", noteDTO);
@@ -90,20 +90,20 @@ public class NoteController {
                 try {
                     note = noteService.getById(id);
                 } catch (IllegalArgumentException e) {
-                    return "redirect:notes/notfound";
+                    return "redirect:notfound";
                 }
                 if(note == null){
-                    return "redirect:notes/notfound";
+                    return "redirect:notfound";
                 }
                 if (!authentication.getName().equals(note.getUser().getUsername())) {
-                    return "redirect:notes/forbidden";
+                    return "redirect:forbidden";
                 }
                 noteService.deleteById(id);
             } catch (IllegalArgumentException e) {
                 model.addAttribute("deleteMsg", e.getMessage());
             }
         }
-        return "redirect:notes/my";
+        return "redirect:my";
     }
 
     @GetMapping("/")
@@ -125,14 +125,14 @@ public class NoteController {
         try {
             note = noteService.getById(id);
         } catch (IllegalArgumentException e) {
-            return "redirect:notes/notfound";
+            return "redirect:notfound";
         }
         if (note == null) {
-            return "redirect:notes/notFound";
+            return "redirect:notFound";
         }
         NoteDTO noteDTO = noteService.getNoteDTOFromNote(note);
         if (noteDTO.getNoteType() == NoteType.PRIVATE && !authentication.getName().equals(noteDTO.getUser().getUsername())) {
-            return "redirect:notes/forbidden";
+            return "redirect:forbidden";
         }
 
         model.addAttribute("note", noteDTO);
@@ -189,14 +189,14 @@ public class NoteController {
         try {
             note = noteService.getById(id);
         } catch (IllegalArgumentException e) {
-            return "redirect:notes/notfound";
+            return "redirect:notfound";
         }
         if (note == null) {
-            return "redirect:notes/notFound";
+            return "redirect:notFound";
         }
 
         if (note.getNoteType() == NoteType.PRIVATE && !authentication.getName().equals(note.getUser().getUsername())) {
-            return "redirect:notes/forbidden";
+            return "redirect:forbidden";
         }
         model.addAttribute("note", note);
         return "notes/share";

@@ -70,7 +70,7 @@ public class UserController {
             model.addAttribute("error", e.getMessage());
             return "changePassword";
         }
-        return "redirect:profile/";
+        return "redirect:/profile/";
     }
 
     @GetMapping("/changeEmail")
@@ -101,7 +101,7 @@ public class UserController {
             model.addAttribute("error", e.getMessage());
             return "changeEmail";
         }
-        return "redirect:profile/";
+        return "redirect:/profile/";
     }
 
     @PostMapping("/logout")

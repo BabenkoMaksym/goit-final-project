@@ -49,7 +49,7 @@ public class AdminController {
         }
         user.setRole(role);
         userRepository.save(user);
-        return "redirect:admin/users";
+        return "redirect:users";
     }
 
 
@@ -67,6 +67,6 @@ public class AdminController {
         }
         user.setEnabled(!user.isEnabled());
         userRepository.save(user);
-        return "redirect:admin/users";
+        return "redirect:users";
     }
 }
