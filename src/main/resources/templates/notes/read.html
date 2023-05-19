@@ -25,7 +25,7 @@
                     <h5 class="card-title" th:text="${note.name}"></h5>
                 </div>
                 <div class="card-body">
-                    <p class="card-text" th:text="${note.content}"></p>
+                    <p id="marked" class="card-text" th:text="${note.content}"></p>
                 </div>
                 <div class="card-footer">
                     <a class="btn btn-secondary" th:href="@{/notes/edit(id=${note.id})}">Edit</a>
@@ -58,6 +58,25 @@
         </div>
     </div>
 </div>
+<div id="preview"></div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var noteContent = new SimpleMDE({
+      element: document.getElementById('noteContent'),
+      autofocus: true,
+      autosave: {
+        enabled: true,
+        uniqueId: "marked"
+      }
+    });
+
+    noteContent.codemirror.on("change", function(){
+      var preview = document.getElementById('preview');
+      preview.innerHTML = noteContent.options.previewRender(noteContent.value());
+    });
+  });
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
