@@ -25,7 +25,7 @@
                     <h5 class="card-title" th:text="${note.name}"></h5>
                 </div>
                 <div class="card-body">
-                    <p id="marked" class="card-text" th:text="${note.content}"></p>
+                    <div id="marked" class="card-text" th:text="${note.content}"></div>
                 </div>
                 <div class="card-footer">
                     <a class="btn btn-secondary" th:href="@{/notes/edit(id=${note.id})}">Edit</a>
@@ -58,23 +58,14 @@
         </div>
     </div>
 </div>
-<div id="preview"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/showdown@1.10.3/dist/showdown.min.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    var noteContent = new SimpleMDE({
-      element: document.getElementById('noteContent'),
-      autofocus: true,
-      autosave: {
-        enabled: true,
-        uniqueId: "marked"
-      }
-    });
-
-    noteContent.codemirror.on("change", function(){
-      var preview = document.getElementById('preview');
-      preview.innerHTML = noteContent.options.previewRender(noteContent.value());
-    });
+    var markdownContent = document.getElementById('marked').innerHTML;
+    var converter = new showdown.Converter();
+    var htmlContent = converter.makeHtml(markdownContent);
+    document.getElementById('marked').innerHTML = htmlContent;
   });
 </script>
 
