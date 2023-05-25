@@ -14,6 +14,12 @@
             text-align: center;
         }
 
+        .note-info {
+            margin-bottom: 8px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
         .name {
             font-size: 20px;
             font-weight: bold;
@@ -26,6 +32,8 @@
             text-overflow: ellipsis;
             max-width: 50ch;
             font-size: 16px;
+            text-align: left;
+            margin-left: 15px
         }
 
         .expand-button {
@@ -76,8 +84,10 @@
     <div class="row">
         <div class="col-md-12">
             <div th:each="note : ${notes}" class="note">
-                <div class="name" th:text="${note.user.username}"></div>
-                <div class="name" th:text="${note.name}"></div>
+                <div class="note-info">
+                    <span th:text="'Created by: ' + ${note.user.username}"></span>
+                </div>
+                <div class="note-info" th:text="${note.name}"></div>
                 <div class="content collapsed" th:text="${note.content}"></div>
                 <button class="expand-button" onclick="expandContent(this)">Expand</button>
                 <div class="comments">

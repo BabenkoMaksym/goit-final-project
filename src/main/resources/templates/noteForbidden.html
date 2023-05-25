@@ -1,13 +1,24 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>MyNotes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Note Not Found</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
 </head>
 <body>
-<h1>Помилка</h1>
-<p>Нема доступу</p>
-<a href="/notes/">
-    <button type="button">OK</button>
-</a>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2 class="text-center">The note is private.</h2>
+            <hr>
+            <div class="alert alert-danger" role="alert">
+                The note is private. To view a private note, its owner must make it public.
+            </div>
+            <a class="btn btn-primary d-block mx-auto" th:href="@{/notes/my}">My Notes</a>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+</html>

@@ -21,17 +21,17 @@ public class NoteValidate {
 
     private static void checkNoteName(Note note) throws NoteCreateException {
         if (!note.getName().matches(NAME_REGEX)) {
-            throw new NoteCreateException("Довжина імені нотатки має бути не менше ніж "
-                    + NAME_MIN_LENGTH + ", та не довше ніж "
-                    + NAME_MAX_LENGTH + " символів");
+            throw new NoteCreateException("The note name must be at least "
+                    + NAME_MIN_LENGTH + " and no longer than "
+                    + NAME_MAX_LENGTH + "characters long");
         }
     }
 
     private static void checkNoteContent(Note note) throws NoteCreateException {
         if (!note.getContent().matches(CONTENT_REGEX)) {
-            throw new NoteCreateException("Довжина тексту нотатки має бути не менше ніж "
-                    + CONTENT_MIN_LENGTH + ", та не довше ніж "
-                    + CONTENT_MAX_LENGTH + " симовлів");
+            throw new NoteCreateException("The length of the note text should be no less than "
+                    + CONTENT_MIN_LENGTH + " and no longer than "
+                    + CONTENT_MAX_LENGTH + " characters");
         }
     }
     private static void checkNoteKeyWords(Note note) throws NoteCreateException{

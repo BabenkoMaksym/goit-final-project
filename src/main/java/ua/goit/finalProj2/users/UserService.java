@@ -28,11 +28,11 @@ public class UserService {
     public void createUser(UserDto userDto) throws AuthenticationException {
         User user = repository.findUserByUsername(userDto.getUsername()).orElse(null);
         if (user != null) {
-            throw new AuthenticationException("Користувач з таким логіном вже існує.");
+            throw new AuthenticationException("A user with this login already exists.");
         } else {
             user = repository.findFirstByEmail(userDto.getEmail()).orElse(null);
             if (user != null) {
-                throw new AuthenticationException("Користувач з таким email вже існує");
+                throw new AuthenticationException("A user with this email already exists");
             } else {
                 user = new User();
                 validateUserRegister(userDto);

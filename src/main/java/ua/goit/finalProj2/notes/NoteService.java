@@ -50,7 +50,7 @@ public class NoteService {
         noteRepository.save(note);
     }
 
-    public Note getById(UUID id) {
+    public Note getById(UUID id) throws IllegalArgumentException{
         Optional<Note> optionalNote = noteRepository.findById(id);
         if (optionalNote.isPresent()) {
             return optionalNote.get();

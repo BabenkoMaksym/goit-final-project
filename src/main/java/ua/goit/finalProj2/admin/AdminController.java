@@ -27,9 +27,10 @@ public class AdminController {
         String username = principal.getName();
         User user = userRepository.findUserByUsername(username).get();
         if (!user.getRole().equals(UserRole.ADMIN)) {
-            return "error";
+            model.addAttribute("error", "You cannot change your own role.");
+            return "admin";
         }
-        List<User> users = userRepository.findAll();
+        List<User> users = userRepository.findAllByOrderByUsernameAsc();
         model.addAttribute("users", users);
         return "admin";
     }
@@ -48,13 +49,12 @@ public class AdminController {
         }
         user.setRole(role);
         userRepository.save(user);
-        return "redirect:/admin/users";
+        return "redirect:users";
     }
 
 
     @PostMapping("/admin/change-enabled")
     public String changeUserEnabledStatus(@RequestParam("username") String username,
-                                          @RequestParam(name = "enabled", required = false) boolean enabled,
                                           Principal principal, Model model)
     {
         User currentUser = userRepository.findUserByUsername(principal.getName()).get();
@@ -65,8 +65,8 @@ public class AdminController {
             model.addAttribute("users", users);
             return "admin";
         }
-        user.setEnabled(enabled);
+        user.setEnabled(!user.isEnabled());
         userRepository.save(user);
-        return "redirect:/admin/users";
+        return "redirect:users";
     }
 }

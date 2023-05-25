@@ -34,19 +34,19 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         User user = userRepository.findUserByUsername(username).orElse(null);
         if (user == null) {
-            request.getSession().setAttribute("error", "Користувача "+ username + " не існує." +
-                    "Перейдіть на сторінку реєстрації");
+            request.getSession().setAttribute("error", "The user "+ username + " does not exist. " +
+                    "Go to the registration page.");
             throw new BadCredentialsException("Username not found");
         }
 
         if (!user.isEnabled()) {
-            request.getSession().setAttribute("error", "Користувача "+ username + " заблоковано");
+            request.getSession().setAttribute("error", "User "+ username + " is blocked");
             throw new DisabledException("User is banned");
 
         }
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            request.getSession().setAttribute("error", "Не вірно введений пароль!");
+            request.getSession().setAttribute("error", "Invalid password");
             throw new BadCredentialsException("Invalid password");
         }
 

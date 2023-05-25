@@ -8,7 +8,11 @@
 </head>
 <body>
 <div class="container mt-5">
-    <h1>Edit Note</h1>
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Edit note</h1>
+        </div>
+    </div>
     <form method="post" th:object="${note}" th:action="@{/notes/edit}">
         <div th:if="${error}" class="alert alert-danger" role="alert">
             <span th:text = ${error}></span>
@@ -19,12 +23,12 @@
             <input type="text" id="name" name="name" class="form-control" th:value="${note.name}">
         </div>
         <div class="mb-3">
-            <label for="keyWords">KeyWords</label>
+            <label for="keyWords" class="form-label">KeyWords</label>
             <input type="text" id="keyWords" name="keyWords" class="form-control" th:value="${note.keyWords}">
         </div>
         <div class="mb-3">
             <label for="content" class="form-label">Content:</label>
-            <textarea id="content" name="content" class="form-control" th:text="${note.content}"></textarea>
+            <textarea id="content" name="content" class="form-control" rows="20" th:text="${note.content}"></textarea>
         </div>
         <div class="mb-3">
             <label for="noteType" class="form-label">Access Type:</label>

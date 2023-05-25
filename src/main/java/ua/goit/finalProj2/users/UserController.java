@@ -57,10 +57,10 @@ public class UserController {
             userDto.setPassword(oldPassword);
             User user = userService.findByUsername(username);
             if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
-                throw new AuthenticationException("Неправильний старий пароль!");
+                throw new AuthenticationException("The old password is incorrect!");
             }
             if (!newPassword.equals(confirmPassword)) {
-                throw new AuthenticationException("Новий пароль не співпадає в двох полях!");
+                throw new AuthenticationException("New password does not match in two fields!");
             }
             checkPasswordValid(newPassword);
             userDto.setPassword(newPassword);
@@ -80,7 +80,10 @@ public class UserController {
     }
 
     @PostMapping("/changeEmail")
-    public String changeEmail(@RequestParam String username, @RequestParam String newEmail, @RequestParam String password, Model model) {
+    public String changeEmail(@RequestParam String username,
+                              @RequestParam String newEmail,
+                              @RequestParam String password,
+                              Model model) {
 
         try {
             UserDto userDto = new UserDto();
@@ -91,7 +94,7 @@ public class UserController {
             userDto.setEmail(newEmail);
             userService.changeEmail(userDto);
             if (!passwordEncoder.matches(password, user.getPassword())) {
-                throw new AuthenticationException("Неправильний пароль!");
+                throw new AuthenticationException("Wrong password!");
             }
         } catch (AuthenticationException e) {
             model.addAttribute("username", username);
@@ -107,6 +110,6 @@ public class UserController {
         if (auth != null) {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
-        return "redirect:/login?logout";
+        return "redirect:login?logout";
     }
 }
