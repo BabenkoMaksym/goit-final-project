@@ -36,6 +36,6 @@ public class UserRegistrationController {
             model.addAttribute("error", e.getMessage());
             return "register";
         }
-        return "redirect:/users/login";
+        return "redirect:users/login";
     }
 }
