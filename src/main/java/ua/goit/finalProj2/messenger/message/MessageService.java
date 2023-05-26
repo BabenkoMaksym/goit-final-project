@@ -1,4 +1,4 @@
-package ua.goit.finalProj2.messenger;
+package ua.goit.finalProj2.messenger.message;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -19,7 +19,9 @@ import java.util.stream.Stream;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class MessageService {
 
-    final MessageRepository messageRepository;
+    @Autowired
+    MessageRepository messageRepository;
+
     @Autowired
     UserService userService;
 
@@ -30,33 +32,18 @@ public class MessageService {
 
 
     public List<Message> listOfMessagesByUser(User user) {
-        return listMessages().
-                stream().
-                filter((message) -> {
-                    return message.getRecipient_user().equals(user) ||
-                            message.getSender_user().equals(user);
-                }).toList();
+        return null;
     }
 
     private Stream<String> streamSendersUsernames(User user) {
-        return listOfMessagesByUser(user)
-                .stream()
-                .map(Message::getSender_user)
-                .map(User::getUsername);
+        return null;
     }
 
     private Stream<String> streamRecipientsUsernames(User user) {
-        return listOfMessagesByUser(user)
-                .stream()
-                .map(Message::getRecipient_user)
-                .map(User::getUsername);
+        return null;
     }
 
-    public Set<String> userContacts(User user) {
-        return Stream.concat(streamRecipientsUsernames(user)
-                        , streamSendersUsernames(user))
-                .collect(Collectors.toSet());
-    }
+
 
 
 
@@ -88,7 +75,6 @@ public class MessageService {
     }
 
     private static boolean isBelongUser(User user, Message message) {
-        return message.getSender_user().equals(user) ||
-                message.getRecipient_user().equals(user);
+        return false;
     }
 }

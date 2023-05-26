@@ -13,20 +13,26 @@
     <div class="row">
         <div class="col-md-12">
             <h1>My Dialogs</h1>
+
+            <form th:action="@{/message/dialogs}" method="post">
+                <p>Знайти користувача за логіном.</p>
+                <p th:text="${error}"></p>
+                <input type="text" placeholder="Логін" name="username" th:value="${username}">
+                <input type="submit" value="Зв'язатися">
+            </form>
+
             <table class="table mt-3">
                 <thead>
                 <tr>
-                    <th class="col-3">Name</th>
-                    <th class="col-9">Message</th>
+                    <th class="col-6">Name</th>
                     <th class="col-1"></th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="contact : ${contacts}">
-                    <td th:text="${contact.getKey()}"></td>
-                    <td th:text="${contact.getValue()[0].getContent()}"></td>
+                <tr th:each="chat : ${chats}">
+                    <td th:text="${chat.getChatName()}"></td>
                     <td>
-                        <a class="btn btn-primary float-end" th:href="@{/message/dialog(name=${contact})}">Read</a>
+                        <a class="btn btn-primary float-end" th:href="@{/message/dialog?chat_id={chat_it}(chat_it = ${chat.getId()})}">Read</a>
                     </td>
                 </tr>
                 </tbody>

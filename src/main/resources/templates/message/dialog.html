@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Create New Message</title>
@@ -8,32 +8,8 @@
 <body>
 <div class="container">
     <h1>Messenger</h1>
+    <h2 th:text="${chat_name}"></h2>
 
-    <form th:action="@{/message/dialog}" method="post" th:object="${message}">
-        <div class="row">
-            <div class="col-md-9">
-                <label for="name" class="form-label">Create new message</label>
-                <input type="text" class="form-control" placeholder="Текст повідомлення"
-                       id="name" name="name" th:field="*{content}"/>
-            </div>
-            <div class="col-md-3 d-flex align-items-center">
-                <button type="submit" class="btn btn-primary ms-auto">Send</button>
-            </div>
-        </div>
-    </form>
-
-    <table class="table mt-3">
-        <thead>
-        <tr>
-            <th>Messages</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="message : ${messages}">
-            <td th:text="${message.getContent()}"> </td>
-        </tr>
-        </tbody>
-    </table>
 </div>
 </body>
 </html>

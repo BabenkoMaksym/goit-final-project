@@ -1,9 +1,10 @@
-package ua.goit.finalProj2.messenger;
+package ua.goit.finalProj2.messenger.message;
 
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
+import ua.goit.finalProj2.messenger.chat.Chat;
 import ua.goit.finalProj2.users.User;
 
 import javax.persistence.*;
@@ -19,18 +20,18 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
-@Column(name = "message")
+    @Column(name = "message")
     String content;
 
     @ManyToOne
     @JoinColumn(name = "sender_user_id")
     @ToString.Exclude
-    User sender_user;
+    Chat chat_id;
 
     @ManyToOne
     @JoinColumn(name = "recipient_user_id")
     @ToString.Exclude
-    User recipient_user;
+    User user_id;
 
     boolean read;
 
