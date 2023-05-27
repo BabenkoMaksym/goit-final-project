@@ -228,10 +228,4 @@ public class NoteController {
         }
         return "redirect:/notes/";
     }
-
-    @PostMapping("/comments/delete")
-    public String deleteComment(@RequestParam UUID id, Model model, Authentication authentication) {
-
-        return "redirect:/notes/";
-    }
 }

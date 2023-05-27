@@ -2,11 +2,9 @@ package ua.goit.finalProj2.comments;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import ua.goit.finalProj2.notes.Note;
-import ua.goit.finalProj2.users.User;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -18,9 +16,10 @@ public class CommentController {
         this.commentRepository = commentRepository;
     }
 
-
-    public void deleteComment(UUID id) {
+    @PostMapping("/notes/comments/delete")
+    public String deleteComment(@RequestParam("id") UUID id) {
         commentRepository.deleteById(id);
+        return "redirect:/notes/";
     }
 
 
