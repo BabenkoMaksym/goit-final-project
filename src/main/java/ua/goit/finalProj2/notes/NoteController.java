@@ -113,11 +113,14 @@ public class NoteController {
         User user = userRepository.findUserByUsername(name).get();
         page = page == null ? 0 : page >= 1 ? page - 1 : page;
         List<NoteDTO> noteDTOs = noteService.listPublicNoteDTOs(page);
+
         if (user.getRole() == UserRole.ADMIN) {
-            model.addAttribute("isAdmin", "admin");
+            model.addAttribute("isAdmin", true);
         }
+
         model.addAttribute("notes", noteDTOs);
         model.addAttribute("comment", new Comment());
+        System.out.println("Authentication name: " + authentication.getName());
         return "notes/feed";
     }
 

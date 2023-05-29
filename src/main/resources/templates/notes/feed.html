@@ -103,11 +103,13 @@
                             <div class="comment">
                                 <div class="user" th:text="${comment.user.username}"></div>
                                 <div class="content" th:text="${comment.content}"></div>
-                                <form action="/notes/comments/delete" method="post" style="display: inline-block;">
-                                    <input type="hidden" name="id" th:value="${comment.id}">
-                                    <button class="btn btn-danger" type="submit">Delete</button>
-                                </form>
-
+                                <!-- Проверка владельца комментария или администратора -->
+                                <div th:if="${isAdmin}">
+                                    <form action="/notes/comments/delete" method="post" style="display: inline-block;">
+                                        <input type="hidden" name="id" th:value="${comment.id}">
+                                        <button class="btn btn-danger" type="submit">Delete</button>
+                                    </form>
+                                </div>
                             </div>
                         </li>
                     </ul>
