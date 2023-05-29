@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ua.goit.finalProj2.comments.Comment;
 import ua.goit.finalProj2.notes.form_common.NoteCreateException;
 import ua.goit.finalProj2.users.User;
 import ua.goit.finalProj2.users.UserRepository;
@@ -112,10 +113,14 @@ public class NoteController {
         User user = userRepository.findUserByUsername(name).get();
         page = page == null ? 0 : page >= 1 ? page - 1 : page;
         List<NoteDTO> noteDTOs = noteService.listPublicNoteDTOs(page);
+
         if (user.getRole() == UserRole.ADMIN) {
-            model.addAttribute("isAdmin", "admin");
+            model.addAttribute("isAdmin", true);
         }
+
         model.addAttribute("notes", noteDTOs);
+        model.addAttribute("comment", new Comment());
+        System.out.println("Authentication name: " + authentication.getName());
         return "notes/feed";
     }
 
@@ -206,5 +211,24 @@ public class NoteController {
     public void saveNoteToClipboard(@RequestParam UUID id) {
         Note note = noteService.getById(id);
         noteService.copyNoteLinkToClipboard(note);
+    }
+    @PostMapping("/comments")
+    public String commentNote(@RequestParam UUID noteId,
+                              @ModelAttribute("comment") Comment comment, Model model, Authentication authentication) {
+        Note note = noteService.getById(noteId);
+
+        comment.setNote(note);
+        comment.setUser(userRepository.findUserByUsername(authentication.getName()).get());
+        comment.setId(UUID.randomUUID());
+        comment.setCreatedAt(LocalDateTime.now());
+
+        note.addComment(comment);
+        try {
+            noteService.update(note);
+        } catch (NoteCreateException e) {
+            model.addAttribute("error", e.getMessage());
+
+        }
+        return "redirect:/notes/";
     }
 }

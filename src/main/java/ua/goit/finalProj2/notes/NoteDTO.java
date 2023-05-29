@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
+import ua.goit.finalProj2.comments.Comment;
 import ua.goit.finalProj2.users.User;
 
 import javax.persistence.*;
@@ -23,4 +24,5 @@ public class NoteDTO {
     NoteType noteType;
     User user;
     LocalDateTime createdAt;
+    List<Comment> comments;
 }

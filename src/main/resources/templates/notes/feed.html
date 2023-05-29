@@ -90,6 +90,30 @@
                 <div class="note-info" th:text="${note.name}"></div>
                 <div class="content collapsed" th:text="${note.content}"></div>
                 <button class="expand-button" onclick="expandContent(this)">Expand</button>
+                <div class="comments">
+                    <form method="POST" action="/notes/comments" th:object="${comment}">
+                        <input type="hidden" name="noteId" th:value="${note.id}" />
+                        <textarea class="form-control" id="content" name="content"
+                                  placeholder="Content (1 to 10,000 characters)"
+                                  rows="5" th:field="*{content}"></textarea>
+                        <button type="submit">Submit</button>
+                    </form>
+                    <ul>
+                        <li th:each="comment : ${note.comments}">
+                            <div class="comment">
+                                <div class="user" th:text="${comment.user.username}"></div>
+                                <div class="content" th:text="${comment.content}"></div>
+                                <!-- Проверка владельца комментария или администратора -->
+                                <div th:if="${isAdmin}">
+                                    <form action="/notes/comments/delete" method="post" style="display: inline-block;">
+                                        <input type="hidden" name="id" th:value="${comment.id}">
+                                        <button class="btn btn-danger" type="submit">Delete</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
             <div class="page-navigation">
                 <button class="btn btn-primary" onclick="previousPage()" th:disabled="${page == 1}">Previous Page</button>

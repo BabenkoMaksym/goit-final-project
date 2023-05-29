@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
+import ua.goit.finalProj2.comments.Comment;
 import ua.goit.finalProj2.notes.Note;
 
 import javax.persistence.*;
@@ -28,5 +29,9 @@ public class User {
     @ToString.Exclude
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
     List<Note> notes;
+
+    @ToString.Exclude
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
+    List<Comment> comments;
 
 }

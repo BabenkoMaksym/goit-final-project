@@ -2,6 +2,7 @@ package ua.goit.finalProj2.notes;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import ua.goit.finalProj2.comments.Comment;
 
 import ua.goit.finalProj2.notes.keyWords.KeyWords;
 import ua.goit.finalProj2.users.User;
@@ -20,6 +21,9 @@ public class Note {
 
     @Id
     UUID id;
+
+    @OneToMany(mappedBy = "note", cascade = CascadeType.ALL)
+    List<Comment> comments = new ArrayList<>();
 
     @Column(name = "name")
     String name;
@@ -43,4 +47,8 @@ public class Note {
 
     @Column(name = "created_at")
     LocalDateTime createdAt;
+
+    public void addComment(Comment comment) {
+        comments.add(comment);
+    }
 }
