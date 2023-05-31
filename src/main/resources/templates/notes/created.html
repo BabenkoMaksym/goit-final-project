@@ -29,7 +29,7 @@
         <tbody>
         <tr>
           <td th:text="${note.name}"></td>
-          <td th:text="${note.content.length() > 200 ? note.content.substring(0, 200) + '...' : note.content}"></td>
+          <td id="marked" th:text="${note.content.length() > 200 ? note.content.substring(0, 200) + '...' : note.content}"></td>
           <td th:text="${note.noteType}"></td>
           <td th:text="${note.createdAt}"></td>
         </tr>
@@ -45,6 +45,15 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/showdown@2.1.0/dist/showdown.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var markdownContent = document.getElementById('marked').innerHTML;
+    var converter = new showdown.Converter();
+    var htmlContent = converter.makeHtml(markdownContent);
+    document.getElementById('marked').innerHTML = htmlContent;
+  });
+</script>
 </body>
 
 </html>
