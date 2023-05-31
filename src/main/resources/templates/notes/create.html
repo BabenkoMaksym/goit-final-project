@@ -6,21 +6,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create New Note</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
+
     <script>
         function insertMarkdownTag(tag) {
             var textarea = document.getElementById('content');
             var start = textarea.selectionStart;
             var end = textarea.selectionEnd;
             var selectedText = textarea.value.substring(start, end);
-            var replacement = tag + selectedText + tag;
-            textarea.value =
-                textarea.value.substring(0, start) +
-                replacement +
-                textarea.value.substring(end, textarea.value.length);
+            var replacement;
+
+            // Check if selected text already has formatting tags
+            if (selectedText.startsWith(tag) && selectedText.endsWith(tag)) {
+                // Remove formatting by replacing selected text without formatting tags
+                replacement = selectedText.substring(tag.length, selectedText.length - tag.length);
+            } else {
+                // Add formatting tags to the selected text
+                replacement = tag + selectedText + tag;
+            }
+
+            textarea.setRangeText(replacement, start, end, 'end');
+            textarea.setSelectionRange(start + tag.length, end + tag.length);
+            textarea.focus();
         }
-
     </script>
-
 </head>
 
 <body>
@@ -36,28 +44,25 @@
         </div>
         <div class="mb-3">
             <label for="name" class="form-label">Name:</label>
-            <input type="text" class="form-control" id="name" name="name" placeholder="Name (5 to 100 characters)"
-                   th:field="*{name}"/>
+            <input type="text" class="form-control" id="name" name="name"
+                   placeholder="Name (5 to 100 characters)" th:field="*{name}" />
         </div>
         <div class="mb-3">
             <label for="keyWords" class="form-label">keyWords</label>
             <input type="text" class="form-control"
                    placeholder="Key words of the note, listed separated by commas. String, 5 to 50 characters inclusive"
-                   id="keyWords" name="keyWords" th:field="*{keyWords}"/><br/>
+                   id="keyWords" name="keyWords" th:field="*{keyWords}" /><br />
         </div>
 
         <div class="mb-3">
             <label for="content" class="form-label">Content:</label>
             <div class="mb-3">
-                <button type="button" class="btn btn-secondary"
-                        onclick="insertMarkdownTag('**')">Bold</button>
-                <button type="button" class="btn btn-secondary"
-                        onclick="insertMarkdownTag('*')">Italic</button>
+                <button type="button" class="btn btn-secondary" onclick="insertMarkdownTag('**')">Bold</button>
+                <button type="button" class="btn btn-secondary" onclick="insertMarkdownTag('*')">Italic</button>
                 <button type="button" class="btn btn-secondary"
                         onclick="insertMarkdownTag('[', '](URL)')">Link</button>
             </div>
-            <textarea class="form-control" id="content" name="content"
-                      placeholder="Content (5 to 10,000 characters)"
+            <textarea class="form-control" id="content" name="content" placeholder="Content (5 to 10,000 characters)"
                       rows="20" th:field="*{content}"></textarea>
         </div>
 
@@ -76,6 +81,15 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/showdown@2.1.0/dist/showdown.min.js"></script>
+<script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var markdownContent = document.getElementById('content').value;
+            var converter = new showdown.Converter();
+            var htmlContent = converter.makeHtml(markdownContent);
+            document.getElementById('content').innerHTML = htmlContent;
+        });
+    </script>
 </body>
 
 </html>

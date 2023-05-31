@@ -43,6 +43,9 @@
             border-radius: 4px;
             padding: 8px 16px;
             cursor: pointer;
+            display: flex;
+        justify-content: center;
+        align-items: center;
         }
 
         .expanded {
@@ -88,7 +91,7 @@
                     <span th:text="'Created by: ' + ${note.user.username}"></span>
                 </div>
                 <div class="note-info" th:text="${note.name}"></div>
-                <div class="content collapsed" th:text="${note.content}"></div>
+                <div id="marked" class="content collapsed" th:text="${note.content}"></div>
                 <button class="expand-button" onclick="expandContent(this)">Expand</button>
             </div>
             <div class="page-navigation">
@@ -101,16 +104,7 @@
 </div>
 
 <script>
-    function expandContent(button) {
-        var note = button.parentNode;
-        var content = note.getElementsByClassName("content")[0];
-        content.classList.toggle("expanded");
-        if (content.classList.contains("expanded")) {
-            button.textContent = "Collapse";
-        } else {
-            button.textContent = "Expand";
-        }
-    }
+
 
     function previousPage() {
         const url = new URL(window.location.href);
@@ -130,6 +124,59 @@
         url.search = searchParams.toString();
         window.location.href = url.toString();
     }
+</script>
+<script>
+    function expandContent(button) {
+        var note = button.parentNode;
+        var content = note.getElementsByClassName("content")[0];
+        content.classList.toggle("expanded");
+        if (content.classList.contains("expanded")) {
+            button.textContent = "Collapse";
+        } else {
+            button.textContent = "Expand";
+        }
+
+        if (!content.classList.contains("expanded")) {
+            var text = content.textContent.trim();
+            var maxLength = 50;
+            if (text.length > maxLength) {
+                content.textContent = text.slice(0, maxLength - 3) + "...";
+            }
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var notes = document.getElementsByClassName("note");
+        for (var i = 0; i < notes.length; i++) {
+            var content = notes[i].getElementsByClassName("content")[0];
+            var expandButton = notes[i].getElementsByClassName("expand-button")[0];
+            if (content.scrollWidth > content.clientWidth) {
+                content.classList.add("collapsed");
+                expandButton.style.display = "flex";
+            } else {
+                content.classList.remove("collapsed");
+                expandButton.style.display = "none";
+            }
+        }
+
+        var collapsedContents = document.getElementsByClassName("content collapsed");
+        for (var i = 0; i < collapsedContents.length; i++) {
+            var text = collapsedContents[i].textContent.trim();
+            var maxLength = 50;
+            if (text.length > maxLength) {
+                collapsedContents[i].textContent = text.slice(0, maxLength - 3) + "...";
+            }
+        }
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/showdown@2.1.0/dist/showdown.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var markdownContent = document.getElementById('marked').innerHTML;
+    var converter = new showdown.Converter();
+    var htmlContent = converter.makeHtml(markdownContent);
+    document.getElementById('marked').innerHTML = htmlContent;
+  });
 </script>
 </body>
 </html>
